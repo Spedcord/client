@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace SpedcordClient
         private ApiClient _apiClient;
         private Ets2Telemetry data = null;
         private float dist = -1;
+        private bool send = true;
+        private Job[] _jobs = new Job[0];
 
         public MainForm(ApiClient apiClient)
         {
@@ -58,25 +61,41 @@ namespace SpedcordClient
                 }
                 else
                 {
-                    nameLabel.Text = "User ID: " + user.Id;
+                    nameLabel.Text = "Failed to fetch username";
                 }
 
                 var company = _apiClient.GetCompany(user.CompanyId);
                 if (company == null)
                 {
-                    companyLabel.Text = "Company ID: " + user.CompanyId;
+                    companyLabel.Text = "Company: None";
                 }
                 else
                 {
                     companyLabel.Text = "Company: " + company.name;
                 }
 
-                foreach (var job in apiClient.GetJobs(user.DiscordId))
+                UpdateJobs();
+            }
+        }
+
+        private void UpdateJobs()
+        {
+            jobList.Items.Clear();
+
+            _jobs = _apiClient.GetJobs(Program.DISCORD_ID) ?? new Job[0];
+
+            foreach (var job in _jobs)
+            {
+                var dateTime = DateTimeOffset.FromUnixTimeMilliseconds(job.EndedAt).LocalDateTime;
+                var str = $"[{dateTime.ToShortDateString()}] {job.FromCity} -> " +
+                          $"{job.ToCity}: {job.Cargo} ({job.CargoWeight}t)";
+
+                while (TextRenderer.MeasureText(str, jobList.Font).Width > jobList.Width)
                 {
-                    var dateTime = DateTimeOffset.FromUnixTimeMilliseconds(job.EndedAt).LocalDateTime;
-                    jobList.Items.Add($"[{dateTime.ToShortDateString()}] {job.FromCity} -> " +
-                                      $"{job.ToCity}: {job.Cargo} ({job.CargoWeight}t)");
+                    str = str.Substring(0, str.Length - 4) + "...";
                 }
+
+                jobList.Items.Add(str);
             }
         }
 
@@ -90,6 +109,14 @@ namespace SpedcordClient
                     statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
                     jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
                     dist = -1;
+
+                    if (!send)
+                    {
+                        send = true;
+                        return;
+                    }
+
+                    _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, data.Job.Income);
                 }
                 catch (Exception exception)
                 {
@@ -97,6 +124,8 @@ namespace SpedcordClient
                     throw;
                 }
             }).Start();
+
+            UpdateJobs();
         }
 
         private void TeleJobStart(object sender, EventArgs e)
@@ -113,8 +142,21 @@ namespace SpedcordClient
                 {
                     // New job started
                     dist = data.Job.NavigationDistanceLeft;
-                    
-                    
+
+                    var response = _apiClient.StartJob(Program.DISCORD_ID, Program.KEY, new Job()
+                    {
+                        FromCity = data.Job.CitySource,
+                        ToCity = data.Job.CityDestination,
+                        Cargo = data.Job.Cargo,
+                        CargoWeight = data.Job.Mass / 1000f,
+                        Truck = data.Manufacturer + " " + data.Truck
+                    });
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        MessageBox.Show("You already have a running job! Please cancel the job.", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        send = false;
+                    }
                 }
 
                 if (!jobInfoLabel.Visible)
@@ -155,8 +197,28 @@ namespace SpedcordClient
         {
         }
 
-        private void materialListView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void reloadButton_Click(object sender, EventArgs e)
         {
+            UpdateJobs();
+        }
+
+        private void JobClickHandler(object sender, EventArgs e)
+        {
+            var idx = jobList.SelectedIndex;
+            if (idx < 0 || idx >= _jobs.Length)
+            {
+                return;
+            }
+
+            var job = _jobs[idx];
+            var startDate = (new DateTime(1970, 1, 1)).AddMilliseconds(job.StartedAt);
+            var endDate = (new DateTime(1970, 1, 1)).AddMilliseconds(job.EndedAt);
+            var timeSpan = endDate.Subtract(startDate);
+
+            MessageBox.Show($"ID: {job.Id}\nRoute: {job.FromCity} -> {job.ToCity}\nCargo: {job.Cargo} " +
+                            $"({job.CargoWeight}t)\nTruck: {job.Truck}\nIncome: {job.Pay}$\nTime: {timeSpan.Hours}h " +
+                            $"{timeSpan.Minutes}m {timeSpan.Seconds}s", "Job #" + job.Id, MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
     }
 }

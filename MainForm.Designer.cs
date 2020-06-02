@@ -1,4 +1,6 @@
-﻿namespace SpedcordClient
+﻿using System.Windows.Forms;
+
+namespace SpedcordClient
 {
     partial class MainForm
     {
@@ -39,6 +41,7 @@
             this.userAvatar = new SpedcordClient.OvalPictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.jobList = new System.Windows.Forms.ListBox();
+            this.reloadButton = new MaterialSkin.Controls.MaterialFlatButton();
             ((System.ComponentModel.ISupportInitialize) (this.userAvatar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -143,14 +146,33 @@
             this.jobList.ItemHeight = 20;
             this.jobList.Location = new System.Drawing.Point(374, 102);
             this.jobList.Name = "jobList";
-            this.jobList.Size = new System.Drawing.Size(400, 240);
+            this.jobList.Size = new System.Drawing.Size(400, 200);
             this.jobList.TabIndex = 9;
+            this.jobList.MouseDoubleClick += new MouseEventHandler(JobClickHandler);
+            // 
+            // reloadButton
+            // 
+            this.reloadButton.AutoSize = true;
+            this.reloadButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.reloadButton.Depth = 0;
+            this.reloadButton.Icon = null;
+            this.reloadButton.Location = new System.Drawing.Point(664, 306);
+            this.reloadButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.reloadButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.reloadButton.Name = "reloadButton";
+            this.reloadButton.Primary = false;
+            this.reloadButton.Size = new System.Drawing.Size(110, 36);
+            this.reloadButton.TabIndex = 10;
+            this.reloadButton.Text = "Reload jobs";
+            this.reloadButton.UseVisualStyleBackColor = true;
+            this.reloadButton.Click += new System.EventHandler(this.reloadButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.reloadButton);
             this.Controls.Add(this.jobList);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.userAvatar);
@@ -168,6 +190,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize) (this.userAvatar)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         private System.Windows.Forms.Label companyLabel;
@@ -177,6 +200,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Label placeholder;
+        private MaterialSkin.Controls.MaterialFlatButton reloadButton;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.Label statusTitle;
         private SpedcordClient.OvalPictureBox userAvatar;

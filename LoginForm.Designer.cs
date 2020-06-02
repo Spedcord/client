@@ -38,6 +38,8 @@ namespace SpedcordClient
             this.discordIdLabel = new System.Windows.Forms.Label();
             this.keyLabel = new System.Windows.Forms.Label();
             this.button = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.registerButton = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.helpButton = new MaterialSkin.Controls.MaterialFlatButton();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,8 +109,9 @@ namespace SpedcordClient
             this.button.AutoSize = true;
             this.button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.button.Depth = 0;
+            this.button.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.button.Icon = null;
-            this.button.Location = new System.Drawing.Point(337, 381);
+            this.button.Location = new System.Drawing.Point(213, 381);
             this.button.MouseState = MaterialSkin.MouseState.HOVER;
             this.button.Name = "button";
             this.button.Primary = true;
@@ -118,11 +121,47 @@ namespace SpedcordClient
             this.button.UseVisualStyleBackColor = true;
             this.button.Click += new System.EventHandler(this.button_Click);
             // 
+            // registerButton
+            // 
+            this.registerButton.AutoSize = true;
+            this.registerButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.registerButton.Depth = 0;
+            this.registerButton.Icon = null;
+            this.registerButton.Location = new System.Drawing.Point(496, 381);
+            this.registerButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.registerButton.Name = "registerButton";
+            this.registerButton.Primary = true;
+            this.registerButton.Size = new System.Drawing.Size(173, 36);
+            this.registerButton.TabIndex = 7;
+            this.registerButton.Text = "Register an account";
+            this.registerButton.UseVisualStyleBackColor = true;
+            this.registerButton.Click += new System.EventHandler(this.registerButton_Click);
+            // 
+            // helpButton
+            // 
+            this.helpButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.helpButton.AutoSize = true;
+            this.helpButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton.Depth = 0;
+            this.helpButton.Icon = null;
+            this.helpButton.Location = new System.Drawing.Point(130, 279);
+            this.helpButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.helpButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.helpButton.Name = "helpButton";
+            this.helpButton.Primary = false;
+            this.helpButton.Size = new System.Drawing.Size(55, 36);
+            this.helpButton.TabIndex = 8;
+            this.helpButton.Text = "Help";
+            this.helpButton.UseVisualStyleBackColor = true;
+            this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.helpButton);
+            this.Controls.Add(this.registerButton);
             this.Controls.Add(this.button);
             this.Controls.Add(this.keyLabel);
             this.Controls.Add(this.discordIdLabel);
@@ -131,7 +170,7 @@ namespace SpedcordClient
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Name = "LoginForm";
-            this.Text = "LoginForm";
+            this.Text = "Spedcord";
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -140,10 +179,12 @@ namespace SpedcordClient
         private MaterialSkin.Controls.MaterialRaisedButton button;
         private System.Windows.Forms.TextBox discordIdInput;
         private System.Windows.Forms.Label discordIdLabel;
+        private MaterialSkin.Controls.MaterialFlatButton helpButton;
         private System.Windows.Forms.TextBox keyInput;
         private System.Windows.Forms.Label keyLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private MaterialSkin.Controls.MaterialRaisedButton registerButton;
 
         #endregion
     }

@@ -83,6 +83,35 @@ namespace SpedcordClient
             return (Job[]) o;
         }
 
+        public ApiResponse StartJob(long discordId, String key, Job job)
+        {
+            var payload = new JsonObject
+            {
+                {"discordId", discordId},
+                {"key", key},
+                {"fromCity", job.FromCity},
+                {"toCity", job.ToCity},
+                {"truck", job.Truck},
+                {"cargo", job.Cargo},
+                {"cargoWeight", job.CargoWeight}
+            };
+            Debug.WriteLine(payload.ToString());
+
+            return MakeApiRequest("/job/start", payload.ToString(), new Dictionary<string, string>(),
+                new Dictionary<string, string>(), "POST");
+        }
+
+        public ApiResponse EndJob(long discordId, string key, double pay)
+        {
+            return MakeApiRequest("/job/end", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>()
+                {
+                    {"discordId", "" + discordId},
+                    {"key", key},
+                    {"pay", "" + pay}
+                }, "POST");
+        }
+
         private ApiResponse MakeApiRequest(string path, string body, Dictionary<string, string> header,
             Dictionary<string, string> query, string method)
         {

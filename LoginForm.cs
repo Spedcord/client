@@ -82,7 +82,21 @@ namespace SpedcordClient
 
 
             var mainForm = new MainForm(_apiClient);
+            Hide();
             mainForm.Show();
+        }
+
+        private void registerButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://api.spedcord.xyz/user/register");
+        }
+
+        private void helpButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("How to get your Discord ID:\n1. Enable developer mode (https://discordia.me/" +
+                            "en/developer-mode)\n2. Right click your name in any chat field and click \"Copy ID\"" +
+                            "\n\nHow to get your key:\n1. Send \"&key\" as a private message to the official Spedcord " +
+                            "Bot (Spedcord Bot#9681)", "Help", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
