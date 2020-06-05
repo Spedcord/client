@@ -31,6 +31,7 @@ namespace SpedcordClient
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusTitle = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
             this.jobInfoLabel = new System.Windows.Forms.Label();
@@ -42,6 +43,7 @@ namespace SpedcordClient
             this.label1 = new System.Windows.Forms.Label();
             this.jobList = new System.Windows.Forms.ListBox();
             this.reloadButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.balanceLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize) (this.userAvatar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,8 +75,7 @@ namespace SpedcordClient
             this.jobInfoLabel.Name = "jobInfoLabel";
             this.jobInfoLabel.Size = new System.Drawing.Size(285, 164);
             this.jobInfoLabel.TabIndex = 3;
-            this.jobInfoLabel.Text = "Route: Berlin <-> London\r\nCargo: Fish (20t)\r\nTruck: Mercedes Benz New Actros\r\nSpe" + "ed: 110 KmH\r\nProgress: 23%";
-            this.jobInfoLabel.Visible = false;
+            this.jobInfoLabel.Text = "Not connected to SDK plugin";
             this.jobInfoLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // jobInfoTitle
@@ -148,7 +149,6 @@ namespace SpedcordClient
             this.jobList.Name = "jobList";
             this.jobList.Size = new System.Drawing.Size(400, 200);
             this.jobList.TabIndex = 9;
-            this.jobList.MouseDoubleClick += new MouseEventHandler(JobClickHandler);
             // 
             // reloadButton
             // 
@@ -167,11 +167,23 @@ namespace SpedcordClient
             this.reloadButton.UseVisualStyleBackColor = true;
             this.reloadButton.Click += new System.EventHandler(this.reloadButton_Click);
             // 
+            // balanceLabel
+            // 
+            this.balanceLabel.BackColor = System.Drawing.Color.Gray;
+            this.balanceLabel.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.balanceLabel.ForeColor = System.Drawing.Color.White;
+            this.balanceLabel.Location = new System.Drawing.Point(252, 380);
+            this.balanceLabel.Name = "balanceLabel";
+            this.balanceLabel.Size = new System.Drawing.Size(245, 34);
+            this.balanceLabel.TabIndex = 11;
+            this.balanceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.balanceLabel);
             this.Controls.Add(this.reloadButton);
             this.Controls.Add(this.jobList);
             this.Controls.Add(this.label1);
@@ -183,6 +195,7 @@ namespace SpedcordClient
             this.Controls.Add(this.jobInfoTitle);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.statusTitle);
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Sizable = false;
@@ -193,6 +206,7 @@ namespace SpedcordClient
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.Label balanceLabel;
         private System.Windows.Forms.Label companyLabel;
         private System.Windows.Forms.Label jobInfoLabel;
         private System.Windows.Forms.Label jobInfoTitle;

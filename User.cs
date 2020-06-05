@@ -17,6 +17,9 @@ namespace SpedcordClient
         [JsonProperty("companyId")]
         public int CompanyId { get; set; }
 
+        [JsonProperty("balance")]
+        public double Balance { get; set; }
+
         [JsonProperty("oauth")]
         public Oauth Oauth { get; set; }
     }
