@@ -42,6 +42,9 @@
         <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>bin\Debug\MaterialSkin.dll</HintPath>
         </Reference>
+        <Reference Include="SCSSdkClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\source\repos\scs-sdk-plugin\scs-client\C#\SCSSdkClient\bin\Debug\SCSSdkClient.dll</HintPath>
+        </Reference>
         <Reference Include="SpedcordClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>bin\Debug\SpedcordClient.exe</HintPath>
         </Reference>

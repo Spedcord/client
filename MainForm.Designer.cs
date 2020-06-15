@@ -44,13 +44,14 @@ namespace SpedcordClient
             this.jobList = new System.Windows.Forms.ListBox();
             this.reloadButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.balanceLabel = new System.Windows.Forms.Label();
+            this.stateLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize) (this.userAvatar)).BeginInit();
             this.SuspendLayout();
             // 
             // statusTitle
             // 
             this.statusTitle.BackColor = System.Drawing.Color.Gainsboro;
-            this.statusTitle.Font = new System.Drawing.Font("Roboto", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.statusTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.statusTitle.Location = new System.Drawing.Point(12, 72);
             this.statusTitle.Name = "statusTitle";
             this.statusTitle.Size = new System.Drawing.Size(285, 30);
@@ -60,7 +61,7 @@ namespace SpedcordClient
             // statusLabel
             // 
             this.statusLabel.BackColor = System.Drawing.Color.Gainsboro;
-            this.statusLabel.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.statusLabel.Location = new System.Drawing.Point(12, 102);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(285, 24);
@@ -70,7 +71,7 @@ namespace SpedcordClient
             // jobInfoLabel
             // 
             this.jobInfoLabel.BackColor = System.Drawing.Color.Gainsboro;
-            this.jobInfoLabel.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.jobInfoLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.jobInfoLabel.Location = new System.Drawing.Point(12, 178);
             this.jobInfoLabel.Name = "jobInfoLabel";
             this.jobInfoLabel.Size = new System.Drawing.Size(285, 164);
@@ -81,7 +82,7 @@ namespace SpedcordClient
             // jobInfoTitle
             // 
             this.jobInfoTitle.BackColor = System.Drawing.Color.Gainsboro;
-            this.jobInfoTitle.Font = new System.Drawing.Font("Roboto", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.jobInfoTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.jobInfoTitle.Location = new System.Drawing.Point(12, 148);
             this.jobInfoTitle.Name = "jobInfoTitle";
             this.jobInfoTitle.Size = new System.Drawing.Size(285, 30);
@@ -99,7 +100,7 @@ namespace SpedcordClient
             // nameLabel
             // 
             this.nameLabel.BackColor = System.Drawing.Color.Gray;
-            this.nameLabel.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.nameLabel.ForeColor = System.Drawing.Color.White;
             this.nameLabel.Location = new System.Drawing.Point(1, 380);
             this.nameLabel.Name = "nameLabel";
@@ -110,7 +111,7 @@ namespace SpedcordClient
             // companyLabel
             // 
             this.companyLabel.BackColor = System.Drawing.Color.Gray;
-            this.companyLabel.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.companyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.companyLabel.ForeColor = System.Drawing.Color.White;
             this.companyLabel.Location = new System.Drawing.Point(1, 414);
             this.companyLabel.Name = "companyLabel";
@@ -130,7 +131,7 @@ namespace SpedcordClient
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.Gainsboro;
-            this.label1.Font = new System.Drawing.Font("Roboto", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(374, 72);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(400, 30);
@@ -142,7 +143,7 @@ namespace SpedcordClient
             // 
             this.jobList.BackColor = System.Drawing.Color.Gainsboro;
             this.jobList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.jobList.Font = new System.Drawing.Font("Roboto", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.jobList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.jobList.FormattingEnabled = true;
             this.jobList.ItemHeight = 20;
             this.jobList.Location = new System.Drawing.Point(374, 102);
@@ -170,7 +171,7 @@ namespace SpedcordClient
             // balanceLabel
             // 
             this.balanceLabel.BackColor = System.Drawing.Color.Gray;
-            this.balanceLabel.Font = new System.Drawing.Font("Roboto", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.balanceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.balanceLabel.ForeColor = System.Drawing.Color.White;
             this.balanceLabel.Location = new System.Drawing.Point(252, 380);
             this.balanceLabel.Name = "balanceLabel";
@@ -178,11 +179,23 @@ namespace SpedcordClient
             this.balanceLabel.TabIndex = 11;
             this.balanceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
+            // stateLabel
+            // 
+            this.stateLabel.BackColor = System.Drawing.Color.Gray;
+            this.stateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.stateLabel.ForeColor = System.Drawing.Color.White;
+            this.stateLabel.Location = new System.Drawing.Point(252, 419);
+            this.stateLabel.Name = "stateLabel";
+            this.stateLabel.Size = new System.Drawing.Size(245, 34);
+            this.stateLabel.TabIndex = 12;
+            this.stateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.stateLabel);
             this.Controls.Add(this.balanceLabel);
             this.Controls.Add(this.reloadButton);
             this.Controls.Add(this.jobList);
@@ -215,6 +228,7 @@ namespace SpedcordClient
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Label placeholder;
         private MaterialSkin.Controls.MaterialFlatButton reloadButton;
+        private System.Windows.Forms.Label stateLabel;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.Label statusTitle;
         private SpedcordClient.OvalPictureBox userAvatar;

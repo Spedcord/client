@@ -112,6 +112,16 @@ namespace SpedcordClient
                 }, "POST");
         }
 
+        public ApiResponse CancelJob(long discordId, string key)
+        {
+            return MakeApiRequest("/job/cancel", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>()
+                {
+                    {"discordId", "" + discordId},
+                    {"key", key}
+                }, "POST");
+        }
+
         private ApiResponse MakeApiRequest(string path, string body, Dictionary<string, string> header,
             Dictionary<string, string> query, string method)
         {

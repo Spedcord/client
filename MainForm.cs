@@ -1,42 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
-using Ets2SdkClient;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using SCSSdkClient;
+using SCSSdkClient.Object;
 
 namespace SpedcordClient
 {
     public partial class MainForm : MaterialForm
     {
         private ApiClient _apiClient;
-        private Ets2Telemetry data = null;
         private float dist = -1;
         private bool send = true;
         private Job[] _jobs = new Job[0];
         private List<double> avgSpeedList = new List<double>();
         private int tick = 0;
 
+        private SCSSdkTelemetry ScsSdkTelemetry;
+        private SCSTelemetry Data;
+
         public MainForm(ApiClient apiClient)
         {
             _apiClient = apiClient;
 
-            Ets2SdkTelemetry telemetry = new Ets2SdkTelemetry();
-            telemetry.Data += TeleData;
-            telemetry.JobStarted += TeleJobStart;
-            telemetry.JobFinished += TeleJobEnd;
+            ScsSdkTelemetry = new SCSSdkTelemetry();
+            ScsSdkTelemetry.Data += Telemetry_Data;
+            ScsSdkTelemetry.JobStarted += Telemetry_JobStarted;
+            ScsSdkTelemetry.JobDelivered += Telemetry_JobDelivered;
+            ScsSdkTelemetry.JobCancelled += Telemetry_JobCancelled;
 
             InitializeComponent();
 
@@ -58,6 +53,148 @@ namespace SpedcordClient
             UpdateJobs();
         }
 
+        private void Telemetry_JobCancelled(object sender, EventArgs e)
+        {
+            //SEND JOB DATA
+            statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
+            //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
+            dist = -1;
+
+            _apiClient.CancelJob(Program.DISCORD_ID, Program.KEY);
+
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(UpdateJobs));
+                this.Invoke(new Action(UpdateUser));
+            }
+        }
+
+        private void Telemetry_JobDelivered(object sender, EventArgs e)
+        {
+            //SEND JOB DATA
+            statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
+            //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
+            dist = -1;
+
+            if (!send)
+            {
+                send = true;
+                return;
+            }
+
+            _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, Data.JobValues.Income);
+
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(UpdateJobs));
+                this.Invoke(new Action(UpdateUser));
+            }
+        }
+
+        private void Telemetry_JobStarted(object sender, EventArgs e)
+        {
+        }
+
+        private void Telemetry_Data(SCSTelemetry data, bool updated)
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    Invoke(new TelemetryData(Telemetry_Data), data, updated);
+                    return;
+                }
+
+                if (data.SpecialEventsValues.OnJob)
+                {
+                    Data = data;
+
+
+                    if (dist == -1 && data.NavigationValues.NavigationDistance != 0)
+                    {
+                        // New job started
+                        dist = data.NavigationValues.NavigationDistance;
+
+                        var response = _apiClient.StartJob(Program.DISCORD_ID, Program.KEY, new Job()
+                        {
+                            FromCity = data.JobValues.CitySource,
+                            ToCity = data.JobValues.CityDestination,
+                            Cargo = data.JobValues.CargoValues.Name,
+                            CargoWeight = data.JobValues.CargoValues.Mass / 1000f,
+                            Truck = data.TruckValues.ConstantsValues.Brand + " " + data.TruckValues.ConstantsValues.Name
+                        });
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            if (response.StatusCode == HttpStatusCode.Unauthorized)
+                            {
+                                MessageBox.Show("Unauthorized", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                            else
+                            {
+                                MessageBox.Show("You already have a running job! Please cancel the job.", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+
+                            send = false;
+                        }
+                    }
+
+                    if (!jobInfoLabel.Visible)
+                    {
+                        jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, true);
+                    }
+
+                    var speed = Math.Floor(data.TruckValues.CurrentValues.DashboardValues.Speed.Kph);
+                    if (speed < 0)
+                    {
+                        speed = 0;
+                    }
+
+
+                    if (tick >= 100)
+                    {
+                        avgSpeedList.Add(speed);
+                        tick = 0;
+                    }
+                    else
+                    {
+                        tick++;
+                    }
+
+                    var avgSpeed = Math.Floor(avgSpeedList.Count == 0 ? 0 : avgSpeedList.Sum() / avgSpeedList.Count);
+
+                    var progress = Math.Floor(((dist - data.NavigationValues.NavigationDistance) / (dist)) * 100);
+                    var str = $"Route: {data.JobValues.CitySource} -> {data.JobValues.CityDestination}\n" +
+                              $"Cargo: {data.JobValues.CargoValues.Name} ({Math.Floor(data.JobValues.CargoValues.Mass) / 1000}t)" +
+                              $"\nEst. income: {data.JobValues.Income}$\nTruck: {data.TruckValues.ConstantsValues.Brand} " +
+                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} Kph\nAvg. speed: {avgSpeed} KmH\n" +
+                              $"Progress: {progress}%";
+
+                    jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
+                    statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "On a job");
+                }
+                else
+                {
+                    //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
+                    var speed = Math.Floor(data.TruckValues.CurrentValues.DashboardValues.Speed.Kph);
+                    if (speed < 0)
+                    {
+                        speed = 0;
+                    }
+
+                    var str = $"Truck: {data.TruckValues.ConstantsValues.Brand} " +
+                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KmH";
+
+                    jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
+                }
+            }
+            catch (Exception e)
+            {
+                // Telemetry was closed
+            }
+        }
+
         private void UpdateUser()
         {
             var user = _apiClient.GetUser(Program.DISCORD_ID);
@@ -69,7 +206,14 @@ namespace SpedcordClient
                     balanceLabel.Text = "Balance: " + user.Balance + "$";
                     userAvatar.ImageLocation = "https://cdn.discordapp.com/avatars/" + user.DiscordId + "/" +
                                                user.Oauth.Avatar + ".png?size=128";
-                    userAvatar.Load();
+                    try
+                    {
+                        userAvatar.Load();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
                 }
                 else
                 {
@@ -93,8 +237,8 @@ namespace SpedcordClient
             jobList.Items.Clear();
 
             _jobs = _apiClient.GetJobs(Program.DISCORD_ID) ?? new Job[0];
-            var tmpArr = new Job[_jobs.Length];
-            for (var i = 0; i < _jobs.Length; i++)
+            var tmpArr = new Job[_jobs.Length >= 40 ? 40 : _jobs.Length];
+            for (var i = 0; i < tmpArr.Length; i++)
             {
                 tmpArr[_jobs.Length - 1 - i] = _jobs[i];
             }
@@ -114,134 +258,6 @@ namespace SpedcordClient
 
                 jobList.Items.Add(str);
             }
-        }
-
-        private void TeleJobEnd(object sender, EventArgs e)
-        {
-            new Thread(() =>
-            {
-                try
-                {
-                    //SEND JOB DATA
-                    statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
-                    //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
-                    dist = -1;
-
-                    if (!send)
-                    {
-                        send = true;
-                        return;
-                    }
-
-                    _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, data.Job.Income);
-
-                    if (InvokeRequired)
-                    {
-                        this.Invoke(new Action(UpdateJobs));
-                        this.Invoke(new Action(UpdateUser));
-                    }
-                }
-                catch (Exception exception)
-                {
-                    Debug.WriteLine(exception);
-                    throw;
-                }
-            }).Start();
-
-
-            avgSpeedList.Clear();
-        }
-
-        private void TeleJobStart(object sender, EventArgs e)
-        {
-        }
-
-        private void TeleData(Ets2Telemetry data, bool newtimestamp)
-        {
-            if (data.Job.OnJob)
-            {
-                this.data = data;
-
-                if (dist == -1 && data.Job.NavigationDistanceLeft != 0)
-                {
-                    // New job started
-                    dist = data.Job.NavigationDistanceLeft;
-
-                    var response = _apiClient.StartJob(Program.DISCORD_ID, Program.KEY, new Job()
-                    {
-                        FromCity = data.Job.CitySource,
-                        ToCity = data.Job.CityDestination,
-                        Cargo = data.Job.Cargo,
-                        CargoWeight = data.Job.Mass / 1000f,
-                        Truck = data.Manufacturer + " " + data.Truck
-                    });
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        if (response.StatusCode == HttpStatusCode.Unauthorized)
-                        {
-                            MessageBox.Show("Unauthorized", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                        else
-                        {
-                            MessageBox.Show("You already have a running job! Please cancel the job.", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-
-                        send = false;
-                    }
-                }
-
-                if (!jobInfoLabel.Visible)
-                {
-                    jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, true);
-                }
-
-                var speed = Math.Floor(data.Drivetrain.SpeedKmh);
-                if (speed < 0)
-                {
-                    speed = 0;
-                }
-
-
-                if (tick >= 100)
-                {
-                    avgSpeedList.Add(speed);
-                    tick = 0;
-                }
-                else
-                {
-                    tick++;
-                }
-
-                var avgSpeed = Math.Floor(avgSpeedList.Count == 0 ? 0 : avgSpeedList.Sum() / avgSpeedList.Count);
-
-                var progress = Math.Floor(((dist - data.Job.NavigationDistanceLeft) / (dist)) * 100);
-                var str = $"Route: {data.Job.CitySource} -> {data.Job.CityDestination}\n" +
-                          $"Cargo: {data.Job.Cargo} ({Math.Floor(data.Job.Mass) / 1000}t)\nEst. income: " +
-                          $"{data.Job.Income}$\nTruck: {data.Manufacturer} {data.Truck}\nSpeed: {speed} KmH" +
-                          $"\nAvg. speed: {avgSpeed} KmH\nProgress: {progress}%";
-
-                jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
-                statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "On a job");
-            }
-            else
-            {
-                //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
-                var speed = Math.Floor(data.Drivetrain.SpeedKmh);
-                if (speed < 0)
-                {
-                    speed = 0;
-                }
-
-                var str = $"Truck: {data.Manufacturer} {data.Truck}\nSpeed: {speed} KmH";
-
-                jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
-            }
-        }
-
-        private void materialLabel1_Click(object sender, EventArgs e)
-        {
         }
 
         private void MainForm_Load(object sender, EventArgs e)
