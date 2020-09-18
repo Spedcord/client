@@ -12,7 +12,10 @@ namespace SpedcordClient
     {
         public static long DISCORD_ID = -1;
         public static string KEY = null;
-        
+
+        public static readonly bool Dev = Environment.GetEnvironmentVariable("SPEDCORD_DEV") != null
+                                          && Environment.GetEnvironmentVariable("SPEDCORD_DEV").Equals("true");
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -41,6 +44,7 @@ namespace SpedcordClient
                 {
                     DISCORD_ID = long.Parse(s.Substring(3));
                 }
+
                 if (s.StartsWith("KEY="))
                 {
                     KEY = s.Substring(4);
@@ -49,7 +53,7 @@ namespace SpedcordClient
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
             if ((DISCORD_ID == -1 || KEY == null) || !apiClient.CheckAuth(DISCORD_ID, KEY))
             {
                 Application.Run(new LoginForm(apiClient));

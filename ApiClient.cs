@@ -12,13 +12,14 @@ namespace SpedcordClient
     public class ApiClient
     {
         private const string ApiServer = "https://api.spedcord.xyz";
+        private const string DevApiServer = "http://localhost:81";
 
         private RestClient _restClient;
 
         public ApiClient()
         {
             // Initialize RestClient
-            _restClient = new RestClient(ApiServer)
+            _restClient = new RestClient(Program.Dev ? DevApiServer : ApiServer)
             {
                 UserAgent = "Spedcord/Client",
                 Timeout = 3000,
@@ -81,6 +82,25 @@ namespace SpedcordClient
             }
 
             return (Job[]) o;
+        }
+
+        public ApiResponse EditRole(long user, string key, int companyId, string roleName, double payout, int perms)
+        {
+            var payload = new JsonObject
+            {
+                {"memberDiscordIds", new JsonArray()},
+                {"permissions", perms},
+                {"name", roleName},
+                {"payout", payout}
+            };
+            return MakeApiRequest("/company/role/update", payload.ToString(), new Dictionary<string, string>(),
+                new Dictionary<string, string>()
+                {
+                    {"mode", "0"},
+                    {"companyId", "" + companyId},
+                    {"userDiscordId", "" + user},
+                    {"key", key},
+                }, "POST");
         }
 
         public ApiResponse StartJob(long discordId, String key, Job job)

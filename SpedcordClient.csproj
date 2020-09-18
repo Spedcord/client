@@ -8,7 +8,7 @@
         <OutputType>WinExe</OutputType>
         <RootNamespace>SpedcordClient</RootNamespace>
         <AssemblyName>SpedcordClient</AssemblyName>
-        <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <Deterministic>true</Deterministic>
@@ -69,6 +69,12 @@
         <Compile Include="ApiResponse.cs" />
         <Compile Include="Company.cs" />
         <Compile Include="ControlExtension.cs" />
+        <Compile Include="EditRoleForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="EditRoleForm.Designer.cs">
+          <DependentUpon>EditRoleForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="Job.cs" />
         <Compile Include="LinqExtension.cs" />
         <Compile Include="LoginForm.cs">
@@ -83,16 +89,28 @@
         <Compile Include="MainForm.Designer.cs">
             <DependentUpon>MainForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="ManageCompanyForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="ManageCompanyForm.Designer.cs">
+          <DependentUpon>ManageCompanyForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="OAuthData.cs" />
         <Compile Include="OvalPictureBox.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="User.cs" />
+        <EmbeddedResource Include="EditRoleForm.resx">
+          <DependentUpon>EditRoleForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="LoginForm.resx">
           <DependentUpon>LoginForm.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="MainForm.resx">
           <DependentUpon>MainForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="ManageCompanyForm.resx">
+          <DependentUpon>ManageCompanyForm.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>

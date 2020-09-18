@@ -45,6 +45,8 @@ namespace SpedcordClient
             this.reloadButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.balanceLabel = new System.Windows.Forms.Label();
             this.stateLabel = new System.Windows.Forms.Label();
+            this.companyBalanceLabel = new System.Windows.Forms.Label();
+            this.manageCompanyButton = new MaterialSkin.Controls.MaterialFlatButton();
             ((System.ComponentModel.ISupportInitialize) (this.userAvatar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,24 +108,25 @@ namespace SpedcordClient
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(245, 34);
             this.nameLabel.TabIndex = 5;
-            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // companyLabel
             // 
             this.companyLabel.BackColor = System.Drawing.Color.Gray;
             this.companyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.companyLabel.ForeColor = System.Drawing.Color.White;
-            this.companyLabel.Location = new System.Drawing.Point(1, 414);
+            this.companyLabel.Location = new System.Drawing.Point(1, 419);
             this.companyLabel.Name = "companyLabel";
-            this.companyLabel.Size = new System.Drawing.Size(245, 39);
+            this.companyLabel.Size = new System.Drawing.Size(245, 34);
             this.companyLabel.TabIndex = 6;
+            this.companyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // userAvatar
             // 
             this.userAvatar.BackColor = System.Drawing.Color.Gray;
             this.userAvatar.Location = new System.Drawing.Point(741, 389);
             this.userAvatar.Name = "userAvatar";
-            this.userAvatar.Size = new System.Drawing.Size(49, 49);
+            this.userAvatar.Size = new System.Drawing.Size(54, 54);
             this.userAvatar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.userAvatar.TabIndex = 7;
             this.userAvatar.TabStop = false;
@@ -177,7 +180,7 @@ namespace SpedcordClient
             this.balanceLabel.Name = "balanceLabel";
             this.balanceLabel.Size = new System.Drawing.Size(245, 34);
             this.balanceLabel.TabIndex = 11;
-            this.balanceLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.balanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // stateLabel
             // 
@@ -190,11 +193,42 @@ namespace SpedcordClient
             this.stateLabel.TabIndex = 12;
             this.stateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // companyBalanceLabel
+            // 
+            this.companyBalanceLabel.BackColor = System.Drawing.Color.Gray;
+            this.companyBalanceLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.companyBalanceLabel.ForeColor = System.Drawing.Color.White;
+            this.companyBalanceLabel.Location = new System.Drawing.Point(252, 419);
+            this.companyBalanceLabel.Name = "companyBalanceLabel";
+            this.companyBalanceLabel.Size = new System.Drawing.Size(245, 34);
+            this.companyBalanceLabel.TabIndex = 13;
+            this.companyBalanceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // manageCompanyButton
+            // 
+            this.manageCompanyButton.AutoSize = true;
+            this.manageCompanyButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.manageCompanyButton.Depth = 0;
+            this.manageCompanyButton.Enabled = false;
+            this.manageCompanyButton.Icon = null;
+            this.manageCompanyButton.Location = new System.Drawing.Point(374, 306);
+            this.manageCompanyButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.manageCompanyButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.manageCompanyButton.Name = "manageCompanyButton";
+            this.manageCompanyButton.Primary = false;
+            this.manageCompanyButton.Size = new System.Drawing.Size(148, 36);
+            this.manageCompanyButton.TabIndex = 14;
+            this.manageCompanyButton.Text = "Manage Company";
+            this.manageCompanyButton.UseVisualStyleBackColor = true;
+            this.manageCompanyButton.Click += new System.EventHandler(this.manageCompanyButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.manageCompanyButton);
+            this.Controls.Add(this.companyBalanceLabel);
             this.Controls.Add(this.stateLabel);
             this.Controls.Add(this.balanceLabel);
             this.Controls.Add(this.reloadButton);
@@ -218,6 +252,10 @@ namespace SpedcordClient
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private MaterialSkin.Controls.MaterialFlatButton manageCompanyButton;
+
+        private System.Windows.Forms.Label companyBalanceLabel;
 
         private System.Windows.Forms.Label balanceLabel;
         private System.Windows.Forms.Label companyLabel;

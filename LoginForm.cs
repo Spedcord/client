@@ -88,7 +88,8 @@ namespace SpedcordClient
 
         private void registerButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://api.spedcord.xyz/user/register");
+            System.Diagnostics.Process.Start((Program.Dev ? "http://localhost:81" : "https://api.spedcord.xyz") +
+                                             "/user/register");
         }
 
         private void helpButton_Click(object sender, EventArgs e)
