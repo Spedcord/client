@@ -24,7 +24,7 @@ namespace SpedcordClient
 
         [JsonProperty("rank")] public int Rank { get; set; }
 
-        [JsonProperty("logbook")] public Logbook Logbook { get; set; }
+        //[JsonProperty("logbook")] public Logbook Logbook { get; set; }
 
         public Role GetRole(long member)
         {
@@ -60,10 +60,10 @@ namespace SpedcordClient
         [Flags]
         public enum Permission
         {
-            Administrator = 0x01,
-            EditCompany = 0x02,
-            ManageMembers = 0x04,
-            ManageRoles = 0x08
+            Administrator = 0x0001,
+            EditCompany = 0x0002,
+            ManageMembers = 0x0004,
+            ManageRoles = 0x0008
         }
 
         public static class PermissionMethods

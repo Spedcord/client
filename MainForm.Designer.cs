@@ -139,7 +139,7 @@ namespace SpedcordClient
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(400, 30);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Jobs   ";
+            this.label1.Text = "Your deliveries";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // jobList
@@ -160,14 +160,14 @@ namespace SpedcordClient
             this.reloadButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.reloadButton.Depth = 0;
             this.reloadButton.Icon = null;
-            this.reloadButton.Location = new System.Drawing.Point(664, 306);
+            this.reloadButton.Location = new System.Drawing.Point(702, 306);
             this.reloadButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.reloadButton.MouseState = MaterialSkin.MouseState.HOVER;
             this.reloadButton.Name = "reloadButton";
             this.reloadButton.Primary = false;
-            this.reloadButton.Size = new System.Drawing.Size(110, 36);
+            this.reloadButton.Size = new System.Drawing.Size(72, 36);
             this.reloadButton.TabIndex = 10;
-            this.reloadButton.Text = "Reload jobs";
+            this.reloadButton.Text = "Reload";
             this.reloadButton.UseVisualStyleBackColor = true;
             this.reloadButton.Click += new System.EventHandler(this.reloadButton_Click);
             // 

@@ -1,23 +1,26 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Drawing;
+using System.Net;
 using System.Threading;
+using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using Microsoft.VisualBasic;
 
 namespace SpedcordClient
 {
     public partial class ManageCompanyForm : MaterialForm
     {
-        private readonly Company _company;
-        private readonly User _user;
-        private ApiClient _apiClient;
+        private readonly ApiClient _apiClient;
+        private readonly MainForm _mainForm;
+        private Company _company;
+        private User _user;
 
-        public ManageCompanyForm(User user, Company company, ApiClient apiClient)
+        public ManageCompanyForm(User user, Company company, ApiClient apiClient, MainForm mainForm)
         {
             _user = user;
             _company = company;
             _apiClient = apiClient;
+            _mainForm = mainForm;
 
             InitializeComponent();
 
@@ -41,10 +44,7 @@ namespace SpedcordClient
         {
             roleList.Items.Clear();
 
-            foreach (var role in _company.Roles)
-            {
-                roleList.Items.Add(role.Name);
-            }
+            foreach (var role in _company.Roles) roleList.Items.Add(role.Name);
         }
 
         private void UpdateMembers()
@@ -56,9 +56,10 @@ namespace SpedcordClient
                 foreach (var id in _company.MemberDiscordIds)
                 {
                     var user = _apiClient.GetUser(id);
+                    var role = _company.GetRole(user.DiscordId);
                     Invoke((Action<string>) AddItem,
                         (user.Oauth.Name ?? "Error " + id) + (user.Oauth.Name == null ? "" : "#") +
-                        (user.Oauth.Discriminator ?? ""));
+                        (user.Oauth.Discriminator ?? "") + (role == null ? "" : " [" + role.Name + "]"));
                 }
             }).Start();
         }
@@ -79,9 +80,21 @@ namespace SpedcordClient
             }
 
             companyNameLabel.Text = _company.Name;
-            leftRowLabel.Text = "Balance:\nRanking:\nMembers:\nRoles:";
+            leftRowLabel.Text = "Balance:\nRanking:\nMembers:\nRoles:\nDefault role:";
             rightRowLabel.Text = "$" + $"{_company.Balance:#,0.##}" + "\n" + _company.Rank + ". place\n" +
-                                 _company.MemberDiscordIds.Length + " members\n" + _company.Roles.Length + " roles";
+                                 _company.MemberDiscordIds.Length + " members\n" + _company.Roles.Length + " roles\n" +
+                                 _company.DefaultRole;
+        }
+
+        private void UpdateAll()
+        {
+            _mainForm.Reload();
+            _company = _mainForm.Company;
+            _user = _mainForm.User;
+
+            UpdateCompanyInfo();
+            UpdateMembers();
+            UpdateRoles();
         }
 
         private bool CanManageRoles()
@@ -101,13 +114,79 @@ namespace SpedcordClient
         private void editRoleButton_Click(object sender, EventArgs e)
         {
             var index = roleList.SelectedIndex;
-            if (index == -1)
+            if (index == -1) return;
+
+            var form = new EditRoleForm(_apiClient, _company.Roles[index], _company.Id, true);
+            form.Show();
+            form.Disposed += (o, args) =>
             {
+                if (form.Success) UpdateAll();
+            };
+        }
+
+        private void addRoleButton_Click(object sender, EventArgs e)
+        {
+            var input = Interaction.InputBox("Please enter a name for the new role", " ",
+                "Name");
+            if (input == null || input.Trim().Length == 0) return;
+
+            var form = new EditRoleForm(_apiClient, new Role {Name = input}, _company.Id, false);
+            form.Show();
+            form.Disposed += (o, args) =>
+            {
+                if (form.Success) UpdateAll();
+            };
+        }
+
+        private void removeRoleButton_Click(object sender, EventArgs e)
+        {
+            var index = roleList.SelectedIndex;
+            if (index == -1) return;
+
+            var response =
+                _apiClient.RemoveRole(Program.DISCORD_ID, Program.KEY, _company.Id, _company.Roles[index].Name);
+            MessageBox.Show(response.ReadResponseMessage(),
+                response.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
+                MessageBoxButtons.OK,
+                response.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
+            if (response.StatusCode == HttpStatusCode.OK) UpdateAll();
+        }
+
+        private void kickButton_Click(object sender, EventArgs e)
+        {
+            var index = memberList.SelectedIndex;
+            if (index == -1) return;
+
+            var apiResponse = _apiClient.KickMember(Program.DISCORD_ID, Program.KEY, _company.DiscordServerId,
+                _company.MemberDiscordIds[index]);
+            MessageBox.Show(apiResponse.ReadResponseMessage(),
+                apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
+                MessageBoxButtons.OK,
+                apiResponse.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
+            if (apiResponse.StatusCode == HttpStatusCode.OK) UpdateAll();
+        }
+
+        private void changeRoleButton_Click(object sender, EventArgs e)
+        {
+            var index = memberList.SelectedIndex;
+            if (index == -1) return;
+
+            var input = Interaction.InputBox("Please enter the role", " ",
+                "Role");
+            if (input == null || input.Trim().Length == 0) return;
+            if (!roleList.Items.Contains(input))
+            {
+                MessageBox.Show("Unknown role", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            var form = new EditRoleForm(_apiClient, _company.Roles[index], _company.Id);
-            form.Show();
+            var apiResponse = _apiClient.UpdateMember(Program.DISCORD_ID, Program.KEY, _company.DiscordServerId,
+                _company.MemberDiscordIds[index], input);
+            MessageBox.Show(apiResponse.ReadResponseMessage(),
+                apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
+                MessageBoxButtons.OK,
+                apiResponse.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
+            if (apiResponse.StatusCode == HttpStatusCode.OK) UpdateAll();
         }
     }
 }

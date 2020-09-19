@@ -1,147 +1,149 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{D935A0DF-46E2-441E-8011-B7D202331749}</ProjectGuid>
-        <OutputType>WinExe</OutputType>
-        <RootNamespace>SpedcordClient</RootNamespace>
-        <AssemblyName>SpedcordClient</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <Deterministic>true</Deterministic>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="Ets2SdkClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\EtsForDiscord\EtsForDiscord\bin\Debug\Ets2SdkClient.dll</HintPath>
-        </Reference>
-        <Reference Include="MaterialSkin, PublicKeyToken=null">
-          <HintPath>packages\MaterialSkin.Updated.0.2.2\lib\MaterialSkin.dll</HintPath>
-        </Reference>
-        <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>bin\Debug\MaterialSkin.dll</HintPath>
-        </Reference>
-        <Reference Include="SCSSdkClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\source\repos\scs-sdk-plugin\scs-client\C#\SCSSdkClient\bin\Debug\SCSSdkClient.dll</HintPath>
-        </Reference>
-        <Reference Include="SpedcordClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>bin\Debug\SpedcordClient.exe</HintPath>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Design" />
-        <Reference Include="System.Web" />
-        <Reference Include="System.Xaml" />
-        <Reference Include="System.Xml.Linq" />
-        <Reference Include="System.Data.DataSetExtensions" />
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Deployment" />
-        <Reference Include="System.Drawing" />
-        <Reference Include="System.Net.Http" />
-        <Reference Include="System.Windows.Forms" />
-        <Reference Include="System.Xml" />
-        <Reference Include="WindowsBase" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="ApiClient.cs" />
-        <Compile Include="ApiResponse.cs" />
-        <Compile Include="Company.cs" />
-        <Compile Include="ControlExtension.cs" />
-        <Compile Include="EditRoleForm.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="EditRoleForm.Designer.cs">
-          <DependentUpon>EditRoleForm.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Job.cs" />
-        <Compile Include="LinqExtension.cs" />
-        <Compile Include="LoginForm.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="LoginForm.Designer.cs">
-          <DependentUpon>LoginForm.cs</DependentUpon>
-        </Compile>
-        <Compile Include="MainForm.cs">
-            <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="MainForm.Designer.cs">
-            <DependentUpon>MainForm.cs</DependentUpon>
-        </Compile>
-        <Compile Include="ManageCompanyForm.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="ManageCompanyForm.Designer.cs">
-          <DependentUpon>ManageCompanyForm.cs</DependentUpon>
-        </Compile>
-        <Compile Include="OAuthData.cs" />
-        <Compile Include="OvalPictureBox.cs" />
-        <Compile Include="Program.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="User.cs" />
-        <EmbeddedResource Include="EditRoleForm.resx">
-          <DependentUpon>EditRoleForm.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="LoginForm.resx">
-          <DependentUpon>LoginForm.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="MainForm.resx">
-          <DependentUpon>MainForm.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="ManageCompanyForm.resx">
-          <DependentUpon>ManageCompanyForm.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="Properties\Resources.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-            <SubType>Designer</SubType>
-        </EmbeddedResource>
-        <Compile Include="Properties\Resources.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-        <None Include="Properties\Settings.settings">
-            <Generator>SettingsSingleFileGenerator</Generator>
-            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-        </None>
-        <Compile Include="Properties\Settings.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Settings.settings</DependentUpon>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="MaterialSkin.Updated" Version="0.2.2" />
-      <PackageReference Include="Microsoft.Toolkit.Forms.UI.Controls.WebView" Version="6.1.0-preview1" />
-      <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.18362.2005" />
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-      <PackageReference Include="RestSharp" Version="106.11.5-alpha.0.2" />
-      <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.6.0" />
-      <PackageReference Include="System.Runtime.WindowsRuntime.UI.Xaml" Version="4.6.0" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D935A0DF-46E2-441E-8011-B7D202331749}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SpedcordClient</RootNamespace>
+    <AssemblyName>SpedcordClient</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="SCSSdkClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\source\repos\scs-sdk-plugin\scs-client\C#\SCSSdkClient\bin\Release\SCSSdkClient.dll</HintPath>
+    </Reference>
+    <Reference Include="SpedcordClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>bin\Debug\SpedcordClient.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApiClient.cs" />
+    <Compile Include="ApiResponse.cs" />
+    <Compile Include="Company.cs" />
+    <Compile Include="ControlExtension.cs" />
+    <Compile Include="discord\ActivityManager.cs" />
+    <Compile Include="discord\Constants.cs" />
+    <Compile Include="discord\Core.cs" />
+    <Compile Include="discord\DiscordController.cs" />
+    <Compile Include="discord\ImageManager.cs" />
+    <Compile Include="discord\LobbyManager.cs" />
+    <Compile Include="discord\StorageManager.cs" />
+    <Compile Include="discord\StoreManager.cs" />
+    <Compile Include="EditRoleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditRoleForm.Designer.cs">
+      <DependentUpon>EditRoleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Job.cs" />
+    <Compile Include="LinqExtension.cs" />
+    <Compile Include="LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ManageCompanyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ManageCompanyForm.Designer.cs">
+      <DependentUpon>ManageCompanyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OAuthData.cs" />
+    <Compile Include="OvalPictureBox.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User.cs" />
+    <EmbeddedResource Include="EditRoleForm.resx">
+      <DependentUpon>EditRoleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ManageCompanyForm.resx">
+      <DependentUpon>ManageCompanyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MaterialSkin.Updated" Version="0.2.2" />
+    <PackageReference Include="Microsoft.Toolkit.Forms.UI.Controls.WebView" Version="6.1.0-preview1" />
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.18362.2005" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RestSharp" Version="106.11.5-alpha.0.2" />
+    <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.6.0" />
+    <PackageReference Include="System.Runtime.WindowsRuntime.UI.Xaml" Version="4.6.0" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

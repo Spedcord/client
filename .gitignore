@@ -1,5 +1,6 @@
 Installer/
 obj/
 bin/
+lib/
 .idea/
 *.iml

@@ -9,25 +9,30 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using SCSSdkClient;
 using SCSSdkClient.Object;
+using SpedcordClient.discord;
 
 namespace SpedcordClient
 {
     public partial class MainForm : MaterialForm
     {
         private readonly ApiClient _apiClient;
-        private Company _company;
+        private readonly DiscordController _discordController;
+        public Company Company;
         private Job[] _jobs = new Job[0];
         private readonly List<double> _avgSpeedList = new List<double>();
         private SCSTelemetry _data;
         private float _dist = -1;
-        private User _user = null;
+        private float income = -1;
+        public User User = null;
 
+        private bool inProgress = false;
         private bool _send = true;
         private int _tick;
 
         public MainForm(ApiClient apiClient)
         {
             _apiClient = apiClient;
+            _discordController = new DiscordController(699032105715236934);
 
             var scsSdkTelemetry = new SCSSdkTelemetry();
             scsSdkTelemetry.Data += Telemetry_Data;
@@ -36,6 +41,8 @@ namespace SpedcordClient
             scsSdkTelemetry.JobCancelled += Telemetry_JobCancelled;
 
             InitializeComponent();
+
+            Disposed += (sender, args) => _discordController.Dispose();
 
             // Create a material theme manager and add the form to manage (this)
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -53,16 +60,21 @@ namespace SpedcordClient
 
             UpdateUser();
             UpdateJobs();
+
+            _discordController.UpdateActivity(false, 0, null);
         }
 
         private void Telemetry_JobCancelled(object sender, EventArgs e)
         {
+            inProgress = false;
+
             //SEND JOB DATA
             statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
             //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
             _dist = -1;
 
             _apiClient.CancelJob(Program.DISCORD_ID, Program.KEY);
+            _discordController.UpdateActivity(false, 0, null);
 
             if (InvokeRequired)
             {
@@ -73,6 +85,8 @@ namespace SpedcordClient
 
         private void Telemetry_JobDelivered(object sender, EventArgs e)
         {
+            inProgress = false;
+
             //SEND JOB DATA
             statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
             //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
@@ -84,17 +98,27 @@ namespace SpedcordClient
                 return;
             }
 
-            _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, _data.JobValues.Income);
+            var apiResponse = _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, income);
+
+            income = -1;
 
             if (InvokeRequired)
             {
                 Invoke(new Action(UpdateJobs));
                 Invoke(new Action(UpdateUser));
+                Invoke(new Action(() => _discordController.UpdateActivity(false, 0, null)));
+            }
+            else
+            {
+                UpdateJobs();
+                UpdateUser();
+                _discordController.UpdateActivity(false, 0, null);
             }
         }
 
         private void Telemetry_JobStarted(object sender, EventArgs e)
         {
+            inProgress = true;
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -107,15 +131,18 @@ namespace SpedcordClient
                     return;
                 }
 
-                if (data.SpecialEventsValues.OnJob)
+                if (data.SpecialEventsValues.OnJob && inProgress)
                 {
                     _data = data;
 
 
-                    if (_dist == -1 && data.NavigationValues.NavigationDistance != 0)
+                    if (_dist == -1f && data.NavigationValues.NavigationDistance != 0)
                     {
                         // New job started
                         _dist = data.NavigationValues.NavigationDistance;
+
+                        _discordController.UpdateActivity(true, DateTimeOffset.Now.ToUnixTimeMilliseconds(),
+                            _data.JobValues.CitySource + " -> " + _data.JobValues.CityDestination);
 
                         var response = _apiClient.StartJob(Program.DISCORD_ID, Program.KEY, new Job
                         {
@@ -154,14 +181,16 @@ namespace SpedcordClient
                         _tick++;
                     }
 
+                    if (_avgSpeedList.Count == 100) _avgSpeedList.Remove(_avgSpeedList[0]);
+                    if (data.JobValues.Income > income) income = data.JobValues.Income;
+
                     var avgSpeed = Math.Floor(_avgSpeedList.Count == 0 ? 0 : _avgSpeedList.Sum() / _avgSpeedList.Count);
 
-                    var progress = Math.Floor((_dist - data.NavigationValues.NavigationDistance) / _dist * 100);
+                    var progress = Math.Floor(((data.NavigationValues.NavigationDistance) / _dist) * 100);
                     var str = $"Route: {data.JobValues.CitySource} -> {data.JobValues.CityDestination}\n" +
                               $"Cargo: {data.JobValues.CargoValues.Name} ({Math.Floor(data.JobValues.CargoValues.Mass) / 1000}t)" +
                               $"\nEst. income: {data.JobValues.Income}$\nTruck: {data.TruckValues.ConstantsValues.Brand} " +
-                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} Kph\nAvg. speed: {avgSpeed} KmH\n" +
-                              $"Progress: {progress}%";
+                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KpH\nAvg. speed: {avgSpeed} KpH\n";
 
                     jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
                     statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "On a job");
@@ -173,7 +202,7 @@ namespace SpedcordClient
                     if (speed < 0) speed = 0;
 
                     var str = $"Truck: {data.TruckValues.ConstantsValues.Brand} " +
-                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KmH";
+                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KpH";
 
                     jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
                 }
@@ -186,15 +215,15 @@ namespace SpedcordClient
 
         private void UpdateUser()
         {
-            _user = _apiClient.GetUser(Program.DISCORD_ID);
-            if (_user != null)
+            User = _apiClient.GetUser(Program.DISCORD_ID);
+            if (User != null)
             {
-                if (_user.Oauth != null)
+                if (User.Oauth != null)
                 {
-                    nameLabel.Text = "Username: " + _user.Oauth.Name + "#" + _user.Oauth.Discriminator;
-                    balanceLabel.Text = "Balance: $" + $"{_user.Balance:#,0.##}";
-                    userAvatar.ImageLocation = "https://cdn.discordapp.com/avatars/" + _user.DiscordId + "/" +
-                                               _user.Oauth.Avatar + ".png?size=128";
+                    nameLabel.Text = "Username: " + User.Oauth.Name + "#" + User.Oauth.Discriminator;
+                    balanceLabel.Text = "Balance: $" + $"{User.Balance:#,0.##}";
+                    userAvatar.ImageLocation = "https://cdn.discordapp.com/avatars/" + User.DiscordId + "/" +
+                                               User.Oauth.Avatar + ".png?size=128";
                     try
                     {
                         userAvatar.Load();
@@ -209,18 +238,18 @@ namespace SpedcordClient
                     nameLabel.Text = "Failed to fetch username";
                 }
 
-                _company = _apiClient.GetCompany(_user.CompanyId);
-                if (_company == null)
+                Company = _apiClient.GetCompany(User.CompanyId);
+                if (Company == null)
                 {
                     companyLabel.Text = "Company: None";
                 }
                 else
                 {
-                    Debug.WriteLine(_company.ToString());
-                    companyLabel.Text = "Company: " + _company.Name;
-                    companyBalanceLabel.Text = "Company balance: $" + $"{_company.Balance:#,0.##}";
+                    Debug.WriteLine(Company.ToString());
+                    companyLabel.Text = "Company: " + Company.Name;
+                    companyBalanceLabel.Text = "Company balance: $" + $"{Company.Balance:#,0.##}";
 
-                    if (_company.GetRole(_user.DiscordId).Permissions != 0) manageCompanyButton.Enabled = true;
+                    if (Company.GetRole(User.DiscordId).Permissions != 0) manageCompanyButton.Enabled = true;
                 }
             }
         }
@@ -256,8 +285,14 @@ namespace SpedcordClient
         {
         }
 
+        public void Reload()
+        {
+            reloadButton_Click(null, null);
+        }
+
         private void reloadButton_Click(object sender, EventArgs e)
         {
+            UpdateUser();
             UpdateJobs();
         }
 
@@ -279,7 +314,7 @@ namespace SpedcordClient
 
         private void manageCompanyButton_Click(object sender, EventArgs e)
         {
-            var form = new ManageCompanyForm(_user, _company, _apiClient);
+            var form = new ManageCompanyForm(User, Company, _apiClient, this);
             form.Show();
 
             manageCompanyButton.Enabled = false;

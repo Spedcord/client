@@ -166,6 +166,7 @@ namespace SpedcordClient
             this.kickButton.TabIndex = 8;
             this.kickButton.Text = "Kick member";
             this.kickButton.UseVisualStyleBackColor = true;
+            this.kickButton.Click += new EventHandler(kickButton_Click);
             // 
             // addRoleButton
             // 
@@ -182,6 +183,7 @@ namespace SpedcordClient
             this.addRoleButton.TabIndex = 9;
             this.addRoleButton.Text = "+";
             this.addRoleButton.UseVisualStyleBackColor = true;
+            this.addRoleButton.Click += new EventHandler(addRoleButton_Click);
             // 
             // removeRoleButton
             // 
@@ -198,6 +200,7 @@ namespace SpedcordClient
             this.removeRoleButton.TabIndex = 10;
             this.removeRoleButton.Text = "-";
             this.removeRoleButton.UseVisualStyleBackColor = true;
+            this.removeRoleButton.Click += new EventHandler(removeRoleButton_Click);
             // 
             // editRoleButton
             // 
@@ -254,6 +257,7 @@ namespace SpedcordClient
             this.changeRoleButton.TabIndex = 14;
             this.changeRoleButton.Text = "Change role";
             this.changeRoleButton.UseVisualStyleBackColor = true;
+            this.changeRoleButton.Click += new EventHandler(changeRoleButton_Click);
             // 
             // ManageCompanyForm
             // 

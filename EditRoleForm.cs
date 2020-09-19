@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
@@ -13,15 +14,19 @@ namespace SpedcordClient
 {
     public partial class EditRoleForm : MaterialForm
     {
+        public bool Success = false;
+
+        private bool edit;
         private ApiClient _apiClient;
         private Role _role;
         private int companyId;
 
-        public EditRoleForm(ApiClient apiClient, Role role, int companyId)
+        public EditRoleForm(ApiClient apiClient, Role role, int companyId, bool edit)
         {
             _apiClient = apiClient;
             _role = role;
             this.companyId = companyId;
+            this.edit = edit;
 
             InitializeComponent();
 
@@ -36,8 +41,14 @@ namespace SpedcordClient
                 TextShade.WHITE
             );
 
-            roleLabel.Text = "Editing role " + _role.Name;
-            payoutTextField.Text = _role.Payout + "";
+            if (!edit)
+            {
+                Text = "Create Role";
+                _role = new Role {Name = _role.Name, Payout = 1000, Permissions = 0, MemberDiscordIds = new long[0]};
+            }
+
+            roleLabel.Text = (edit ? "Editing" : "Creating") + " role " + _role.Name;
+            payoutTextField.Text = _role.Payout.ToString(new NumberFormatInfo {NumberDecimalSeparator = "."});
 
             permAdmin.CheckStateChanged += (sender, args) =>
             {
@@ -81,17 +92,20 @@ namespace SpedcordClient
             double payout;
             try
             {
-                payout = Double.Parse(payoutTextField.Text);
+                var formatInfo = new NumberFormatInfo {NumberDecimalSeparator = "."};
+                payout = double.Parse(payoutTextField.Text, NumberStyles.Float, formatInfo);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 MessageBox.Show("Please enter a valid payout.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            Debug.WriteLine(payout);
             if (payout < 1 || payout > 100_000)
             {
-                MessageBox.Show("Please enter a valid payout. (1 - 100.000)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a valid payout. (1 - 100.000)", "Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
 
@@ -112,31 +126,16 @@ namespace SpedcordClient
 
             updateButton.Enabled = false;
 
-            var apiResponse =
-                _apiClient.EditRole(Program.DISCORD_ID, Program.KEY, companyId, _role.Name, payout, permsInt);
+            var apiResponse = edit
+                ? _apiClient.EditRole(Program.DISCORD_ID, Program.KEY, companyId, _role.Name, payout, permsInt)
+                : _apiClient.CreateRole(Program.DISCORD_ID, Program.KEY, companyId, _role.Name, payout, permsInt);
 
-            var reader = new JsonTextReader(new StringReader(apiResponse.Response));
-            string msg = null;
-            bool next = false;
-            while (reader.Read())
-            {
-                if (next)
-                {
-                    msg = (string) reader.Value;
-                    break;
-                }
-
-                if (reader.TokenType == JsonToken.PropertyName && reader.Value.Equals("message"))
-                {
-                    next = true;
-                }
-            }
-
-            MessageBox.Show(msg, apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
+            MessageBox.Show(apiResponse.ReadResponseMessage(), apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
                 MessageBoxButtons.OK,
                 apiResponse.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
             if (apiResponse.StatusCode == HttpStatusCode.OK)
             {
+                Success = true;
                 Hide();
                 Dispose();
             }

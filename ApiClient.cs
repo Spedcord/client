@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
@@ -14,7 +13,7 @@ namespace SpedcordClient
         private const string ApiServer = "https://api.spedcord.xyz";
         private const string DevApiServer = "http://localhost:81";
 
-        private RestClient _restClient;
+        private readonly RestClient _restClient;
 
         public ApiClient()
         {
@@ -30,12 +29,13 @@ namespace SpedcordClient
 
         public bool CheckAuth(long discordId, string key)
         {
-            ApiResponse response = MakeApiRequest("/user/checkauth", "", new Dictionary<string, string>(),
-                new Dictionary<string, string>()
+            var response = MakeApiRequest("/user/checkauth", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>
                 {
                     {"userDiscordId", "" + discordId},
                     {"key", key}
                 }, "POST");
+            Debug.WriteLine(response.StatusCode);
             return response.StatusCode == HttpStatusCode.OK;
         }
 
@@ -46,10 +46,7 @@ namespace SpedcordClient
 
             var o = JsonConvert.DeserializeObject(response.Response, typeof(User));
 
-            if (o == null)
-            {
-                return null;
-            }
+            if (o == null) return null;
 
             return (User) o;
         }
@@ -61,10 +58,7 @@ namespace SpedcordClient
 
             var o = JsonConvert.DeserializeObject(response.Response, typeof(Company));
 
-            if (o == null)
-            {
-                return null;
-            }
+            if (o == null) return null;
 
             return (Company) o;
         }
@@ -76,12 +70,72 @@ namespace SpedcordClient
 
             var o = JsonConvert.DeserializeObject(response.Response, typeof(Job[]));
 
-            if (o == null)
-            {
-                return null;
-            }
+            if (o == null) return null;
 
             return (Job[]) o;
+        }
+
+        public ApiResponse UpdateMember(long user, string key, long company, long otherUser, string role)
+        {
+            return MakeApiRequest("/company/member/update", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    {"companyDiscordId", company + ""},
+                    {"changerDiscordId", user + ""},
+                    {"userDiscordId", otherUser + ""},
+                    {"role", role},
+                    {"key", key}
+                }, "POST");
+        }
+
+        public ApiResponse KickMember(long user, string key, long company, long otherUser)
+        {
+            return MakeApiRequest("/company/kickmember", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    {"companyDiscordId", company + ""},
+                    {"kickerDiscordId", user + ""},
+                    {"userDiscordId", otherUser + ""},
+                    {"key", key}
+                }, "POST");
+        }
+
+        public ApiResponse CreateRole(long user, string key, int companyId, string roleName, double payout, int perms)
+        {
+            var payload = new JsonObject
+            {
+                {"memberDiscordIds", new JsonArray()},
+                {"permissions", perms},
+                {"name", roleName},
+                {"payout", payout}
+            };
+            return MakeApiRequest("/company/role/update", payload.ToString(), new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    {"mode", "1"},
+                    {"companyId", "" + companyId},
+                    {"userDiscordId", "" + user},
+                    {"key", key}
+                }, "POST");
+        }
+
+        public ApiResponse RemoveRole(long user, string key, int companyId, string roleName)
+        {
+            var payload = new JsonObject
+            {
+                {"memberDiscordIds", new JsonArray()},
+                {"permissions", 0},
+                {"name", roleName},
+                {"payout", 0}
+            };
+            return MakeApiRequest("/company/role/update", payload.ToString(), new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    {"mode", "2"},
+                    {"companyId", "" + companyId},
+                    {"userDiscordId", "" + user},
+                    {"key", key}
+                }, "POST");
         }
 
         public ApiResponse EditRole(long user, string key, int companyId, string roleName, double payout, int perms)
@@ -94,16 +148,16 @@ namespace SpedcordClient
                 {"payout", payout}
             };
             return MakeApiRequest("/company/role/update", payload.ToString(), new Dictionary<string, string>(),
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     {"mode", "0"},
                     {"companyId", "" + companyId},
                     {"userDiscordId", "" + user},
-                    {"key", key},
+                    {"key", key}
                 }, "POST");
         }
 
-        public ApiResponse StartJob(long discordId, String key, Job job)
+        public ApiResponse StartJob(long discordId, string key, Job job)
         {
             var payload = new JsonObject
             {
@@ -124,7 +178,7 @@ namespace SpedcordClient
         public ApiResponse EndJob(long discordId, string key, double pay)
         {
             return MakeApiRequest("/job/end", "", new Dictionary<string, string>(),
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     {"discordId", "" + discordId},
                     {"key", key},
@@ -135,7 +189,7 @@ namespace SpedcordClient
         public ApiResponse CancelJob(long discordId, string key)
         {
             return MakeApiRequest("/job/cancel", "", new Dictionary<string, string>(),
-                new Dictionary<string, string>()
+                new Dictionary<string, string>
                 {
                     {"discordId", "" + discordId},
                     {"key", key}
@@ -154,10 +208,7 @@ namespace SpedcordClient
                 .ForEach(pair => restRequest.AddHeader(pair.Key, pair.Value));
 
             // Write the body if the given string is not empty
-            if (!body.Equals(""))
-            {
-                restRequest.Body = new RequestBody("text/plain", "text/plain", body);
-            }
+            if (!body.Equals("")) restRequest.Body = new RequestBody("text/plain", "text/plain", body);
 
             // Execute the request and retrieve a response
             var restResponse = _restClient.Execute(restRequest);
