@@ -9,7 +9,9 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using SCSSdkClient;
 using SCSSdkClient.Object;
+using SpedcordClient.api;
 using SpedcordClient.discord;
+using User = SpedcordClient.api.User;
 
 namespace SpedcordClient
 {
@@ -19,16 +21,16 @@ namespace SpedcordClient
         private readonly DiscordController _discordController;
         public Company Company;
         private Job[] _jobs = new Job[0];
-        private readonly List<double> _avgSpeedList = new List<double>();
         private SCSTelemetry _data;
         private float _dist = -1;
-        private float income = -1;
-        public User User = null;
+        private float _income = -1;
+        public User User;
 
-        private bool inProgress = false;
+        private readonly List<double> _avgSpeedList = new List<double>();
+        private bool _inProgress;
         private bool _send = true;
         private int _tick;
-        private long[] lastPos = {0, 0};
+        private long[] _lastPos = {0, 0};
 
         public MainForm(ApiClient apiClient)
         {
@@ -67,13 +69,13 @@ namespace SpedcordClient
 
         private void Telemetry_JobCancelled(object sender, EventArgs e)
         {
-            inProgress = false;
+            _inProgress = false;
 
             //SEND JOB DATA
             statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
             //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
             _dist = -1;
-            lastPos = new long[] {0, 0};
+            _lastPos = new long[] {0, 0};
 
             _apiClient.CancelJob(Program.DISCORD_ID, Program.KEY);
             _discordController.UpdateActivity(false, 0, null);
@@ -83,17 +85,22 @@ namespace SpedcordClient
                 Invoke(new Action(UpdateJobs));
                 Invoke(new Action(UpdateUser));
             }
+            else
+            {
+                UpdateJobs();
+                UpdateUser();
+            }
         }
 
         private void Telemetry_JobDelivered(object sender, EventArgs e)
         {
-            inProgress = false;
+            _inProgress = false;
 
             //SEND JOB DATA
             statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
             //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
             _dist = -1;
-            lastPos = new long[] {0, 0};
+            _lastPos = new long[] {0, 0};
 
             if (!_send)
             {
@@ -101,9 +108,9 @@ namespace SpedcordClient
                 return;
             }
 
-            var apiResponse = _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, income);
+            _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, _income);
 
-            income = -1;
+            _income = -1;
 
             if (InvokeRequired)
             {
@@ -121,7 +128,7 @@ namespace SpedcordClient
 
         private void Telemetry_JobStarted(object sender, EventArgs e)
         {
-            inProgress = true;
+            _inProgress = true;
         }
 
         private void Telemetry_Data(SCSTelemetry data, bool updated)
@@ -134,7 +141,7 @@ namespace SpedcordClient
                     return;
                 }
 
-                if (data.SpecialEventsValues.OnJob && inProgress)
+                if (data.SpecialEventsValues.OnJob && _inProgress)
                 {
                     _data = data;
 
@@ -185,22 +192,21 @@ namespace SpedcordClient
                     }
 
                     if (_avgSpeedList.Count == 100) _avgSpeedList.Remove(_avgSpeedList[0]);
-                    if (data.JobValues.Income > income) income = data.JobValues.Income;
+                    if (data.JobValues.Income > _income) _income = data.JobValues.Income;
 
                     var avgSpeed = Math.Floor(_avgSpeedList.Count == 0 ? 0 : _avgSpeedList.Sum() / _avgSpeedList.Count);
 
                     var posVal = data.TruckValues.CurrentValues.PositionValue.Position;
-                    var posStr = Math.Floor(posVal.X) + " " + Math.Floor(posVal.Y) + " " + Math.Floor(posVal.Z);
-
-                    long lastX = lastPos[0];
-                    long lastZ = lastPos[1];
-                    long currX = (long) posVal.X;
-                    long currZ = (long) posVal.Z;
-                    double dist = Math.Sqrt(Math.Pow(lastX - currX, 2) + Math.Pow(lastZ - currZ, 2));
+                    var lastX = _lastPos[0];
+                    var lastZ = _lastPos[1];
+                    var currX = (long) posVal.X;
+                    var currZ = (long) posVal.Z;
+                    var dist = Math.Sqrt(Math.Pow(lastX - currX, 2) + Math.Pow(lastZ - currZ, 2));
+                    
                     if (dist >= 100)
                     {
-                        lastPos[0] = currX;
-                        lastPos[1] = currZ;
+                        _lastPos[0] = currX;
+                        _lastPos[1] = currZ;
                         new Thread(() =>
                             {
                                 var res = _apiClient.PostPosition(Program.DISCORD_ID, Program.KEY, currX, currZ);
@@ -213,8 +219,7 @@ namespace SpedcordClient
                     var str = $"Route: {data.JobValues.CitySource} -> {data.JobValues.CityDestination}\n" +
                               $"Cargo: {data.JobValues.CargoValues.Name} ({Math.Floor(data.JobValues.CargoValues.Mass) / 1000}t)" +
                               $"\nEst. income: {data.JobValues.Income}$\nTruck: {data.TruckValues.ConstantsValues.Brand} " +
-                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KpH\nAvg. speed: {avgSpeed} KpH\nPOS: " +
-                              posStr;
+                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KpH\nAvg. speed: {avgSpeed} KpH";
 
                     jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
                     statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "On a job");

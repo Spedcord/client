@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using SpedcordClient.misc;
 
 namespace SpedcordClient
 {
@@ -39,7 +40,7 @@ namespace SpedcordClient
             this.placeholder = new System.Windows.Forms.Label();
             this.nameLabel = new System.Windows.Forms.Label();
             this.companyLabel = new System.Windows.Forms.Label();
-            this.userAvatar = new SpedcordClient.OvalPictureBox();
+            this.userAvatar = new OvalPictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.jobList = new System.Windows.Forms.ListBox();
             this.reloadButton = new MaterialSkin.Controls.MaterialFlatButton();
@@ -269,7 +270,7 @@ namespace SpedcordClient
         private System.Windows.Forms.Label stateLabel;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.Label statusTitle;
-        private SpedcordClient.OvalPictureBox userAvatar;
+        private OvalPictureBox userAvatar;
 
         #endregion
     }

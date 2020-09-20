@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
+using SpedcordClient.api;
 
 namespace SpedcordClient
 {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpedcordClient
+namespace SpedcordClient.api
 {
     public partial class Job
     {

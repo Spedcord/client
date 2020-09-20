@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SpedcordClient.api;
 
 namespace SpedcordClient
 {

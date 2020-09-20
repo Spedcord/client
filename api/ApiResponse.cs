@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 
-namespace SpedcordClient
+namespace SpedcordClient.api
 {
     public class ApiResponse
     {

@@ -6,7 +6,7 @@ using System.Net;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace SpedcordClient
+namespace SpedcordClient.api
 {
     public class ApiClient
     {
