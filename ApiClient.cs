@@ -51,6 +51,17 @@ namespace SpedcordClient
             return (User) o;
         }
 
+        public ApiResponse PostPosition(long user, string key, long x, long z)
+        {
+            return MakeApiRequest("/job/pos", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    {"discordId", user + ""},
+                    {"key", key},
+                    {"xz", x + ";" + z}
+                }, "POST");
+        }
+
         public Company GetCompany(int id)
         {
             var response = MakeApiRequest("/company/info?id=" + id, "", new Dictionary<string, string>(),

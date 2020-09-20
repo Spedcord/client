@@ -28,6 +28,7 @@ namespace SpedcordClient
         private bool inProgress = false;
         private bool _send = true;
         private int _tick;
+        private long[] lastPos = {0, 0};
 
         public MainForm(ApiClient apiClient)
         {
@@ -72,6 +73,7 @@ namespace SpedcordClient
             statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
             //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
             _dist = -1;
+            lastPos = new long[] {0, 0};
 
             _apiClient.CancelJob(Program.DISCORD_ID, Program.KEY);
             _discordController.UpdateActivity(false, 0, null);
@@ -91,6 +93,7 @@ namespace SpedcordClient
             statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "Not on a job");
             //jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Visible, false);
             _dist = -1;
+            lastPos = new long[] {0, 0};
 
             if (!_send)
             {
@@ -186,11 +189,32 @@ namespace SpedcordClient
 
                     var avgSpeed = Math.Floor(_avgSpeedList.Count == 0 ? 0 : _avgSpeedList.Sum() / _avgSpeedList.Count);
 
-                    var progress = Math.Floor(((data.NavigationValues.NavigationDistance) / _dist) * 100);
+                    var posVal = data.TruckValues.CurrentValues.PositionValue.Position;
+                    var posStr = Math.Floor(posVal.X) + " " + Math.Floor(posVal.Y) + " " + Math.Floor(posVal.Z);
+
+                    long lastX = lastPos[0];
+                    long lastZ = lastPos[1];
+                    long currX = (long) posVal.X;
+                    long currZ = (long) posVal.Z;
+                    double dist = Math.Sqrt(Math.Pow(lastX - currX, 2) + Math.Pow(lastZ - currZ, 2));
+                    if (dist >= 100)
+                    {
+                        lastPos[0] = currX;
+                        lastPos[1] = currZ;
+                        new Thread(() =>
+                            {
+                                var res = _apiClient.PostPosition(Program.DISCORD_ID, Program.KEY, currX, currZ);
+                                Debug.WriteLine(res.StatusCode);
+                                Debug.WriteLine(res.Response);
+                            })
+                            .Start();
+                    }
+
                     var str = $"Route: {data.JobValues.CitySource} -> {data.JobValues.CityDestination}\n" +
                               $"Cargo: {data.JobValues.CargoValues.Name} ({Math.Floor(data.JobValues.CargoValues.Mass) / 1000}t)" +
                               $"\nEst. income: {data.JobValues.Income}$\nTruck: {data.TruckValues.ConstantsValues.Brand} " +
-                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KpH\nAvg. speed: {avgSpeed} KpH\n";
+                              $"{data.TruckValues.ConstantsValues.Name}\nSpeed: {speed} KpH\nAvg. speed: {avgSpeed} KpH\nPOS: " +
+                              posStr;
 
                     jobInfoLabel.SetPropertyThreadSafe(() => jobInfoLabel.Text, str);
                     statusLabel.SetPropertyThreadSafe(() => statusLabel.Text, "On a job");

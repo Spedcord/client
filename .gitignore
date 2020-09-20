@@ -3,4 +3,5 @@ obj/
 bin/
 lib/
 .idea/
+.vs/
 *.iml
