@@ -5,6 +5,8 @@ The client that drivers need to run to log jobs
 
 ## Images
 
-![client](https://nobody-will.make-america-great-aga.in/VHNoYDQLhKwzIzzS)
+![client](https://nobody-will.make-america-great-aga.in/gJfsMOKKwbUfxaiI)
 
-![company manager](https://nobody-will.make-america-great-aga.in/SpkYMymEhWQuighw)
+![company manager](https://nobody-will.make-america-great-aga.in/XoKFtcGKpbLDbYJY)
+
+![company role editor](https://nobody-will.make-america-great-aga.in/xisNgAzOJnFUHWsc)
