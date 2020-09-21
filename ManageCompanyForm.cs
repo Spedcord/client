@@ -36,6 +36,15 @@ namespace SpedcordClient
                 TextShade.WHITE
             );
 
+
+            kickButton.Click += kickButton_Click;
+            addRoleButton.Click += addRoleButton_Click;
+            removeRoleButton.Click += removeRoleButton_Click;
+            editRoleButton.Click += editRoleButton_Click;
+            changeRoleButton.Click += changeRoleButton_Click;
+            editNameButton.Click += editNameButton_Click;
+            editDefRole.Click += editDefRoleButton_Click;
+
             UpdateCompanyInfo();
             UpdateMembers();
             UpdateRoles();
@@ -82,7 +91,7 @@ namespace SpedcordClient
 
             companyNameLabel.Text = _company.Name;
             leftRowLabel.Text = "Balance:\nRanking:\nMembers:\nRoles:\nDefault role:";
-            rightRowLabel.Text = "$" + $"{_company.Balance:#,0.##}" + "\n" + _company.Rank + ". place\n" +
+            rightRowLabel.Text = "$" + $"{_company.Balance:#,0.##}" + "\n#" + _company.Rank + "\n" +
                                  _company.MemberDiscordIds.Length + " members\n" + _company.Roles.Length + " roles\n" +
                                  _company.DefaultRole;
         }
@@ -183,6 +192,32 @@ namespace SpedcordClient
 
             var apiResponse = _apiClient.UpdateMember(Program.DISCORD_ID, Program.KEY, _company.DiscordServerId,
                 _company.MemberDiscordIds[index], input);
+            MessageBox.Show(apiResponse.ReadResponseMessage(),
+                apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
+                MessageBoxButtons.OK,
+                apiResponse.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
+            if (apiResponse.StatusCode == HttpStatusCode.OK) UpdateAll();
+        }
+
+        private void editNameButton_Click(object sender, EventArgs e)
+        {
+            var name = Interaction.InputBox("Question", "Please enter a new name for your company:", "");
+            if (name == null || name.Equals("")) return;
+
+            var apiResponse = _apiClient.EditCompany(Program.DISCORD_ID, Program.KEY, _company.Id, name, null);
+            MessageBox.Show(apiResponse.ReadResponseMessage(),
+                apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
+                MessageBoxButtons.OK,
+                apiResponse.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
+            if (apiResponse.StatusCode == HttpStatusCode.OK) UpdateAll();
+        }
+
+        private void editDefRoleButton_Click(object sender, EventArgs e)
+        {
+            var role = Interaction.InputBox("Question", "Please enter the name of the new default role:", "");
+            if (role == null || role.Equals("")) return;
+
+            var apiResponse = _apiClient.EditCompany(Program.DISCORD_ID, Program.KEY, _company.Id, null, role);
             MessageBox.Show(apiResponse.ReadResponseMessage(),
                 apiResponse.StatusCode != HttpStatusCode.OK ? "Error" : "Success",
                 MessageBoxButtons.OK,

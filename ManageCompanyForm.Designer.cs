@@ -47,6 +47,8 @@ namespace SpedcordClient
             this.memberList = new System.Windows.Forms.ListBox();
             this.roleList = new System.Windows.Forms.ListBox();
             this.changeRoleButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.editNameButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.editDefRole = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // companyOverviewTitleLabel
@@ -166,7 +168,6 @@ namespace SpedcordClient
             this.kickButton.TabIndex = 8;
             this.kickButton.Text = "Kick member";
             this.kickButton.UseVisualStyleBackColor = true;
-            this.kickButton.Click += new EventHandler(kickButton_Click);
             // 
             // addRoleButton
             // 
@@ -183,7 +184,6 @@ namespace SpedcordClient
             this.addRoleButton.TabIndex = 9;
             this.addRoleButton.Text = "+";
             this.addRoleButton.UseVisualStyleBackColor = true;
-            this.addRoleButton.Click += new EventHandler(addRoleButton_Click);
             // 
             // removeRoleButton
             // 
@@ -200,7 +200,6 @@ namespace SpedcordClient
             this.removeRoleButton.TabIndex = 10;
             this.removeRoleButton.Text = "-";
             this.removeRoleButton.UseVisualStyleBackColor = true;
-            this.removeRoleButton.Click += new EventHandler(removeRoleButton_Click);
             // 
             // editRoleButton
             // 
@@ -217,7 +216,6 @@ namespace SpedcordClient
             this.editRoleButton.TabIndex = 11;
             this.editRoleButton.Text = "Edit selected role";
             this.editRoleButton.UseVisualStyleBackColor = true;
-            this.editRoleButton.Click += new EventHandler(editRoleButton_Click);
             // 
             // memberList
             // 
@@ -257,13 +255,46 @@ namespace SpedcordClient
             this.changeRoleButton.TabIndex = 14;
             this.changeRoleButton.Text = "Change role";
             this.changeRoleButton.UseVisualStyleBackColor = true;
-            this.changeRoleButton.Click += new EventHandler(changeRoleButton_Click);
+            // 
+            // editNameButton
+            // 
+            this.editNameButton.AutoSize = true;
+            this.editNameButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editNameButton.Depth = 0;
+            this.editNameButton.Icon = null;
+            this.editNameButton.Location = new System.Drawing.Point(293, 402);
+            this.editNameButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.editNameButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.editNameButton.Name = "editNameButton";
+            this.editNameButton.Primary = false;
+            this.editNameButton.Size = new System.Drawing.Size(92, 36);
+            this.editNameButton.TabIndex = 15;
+            this.editNameButton.Text = "Edit name";
+            this.editNameButton.UseVisualStyleBackColor = true;
+            // 
+            // editDefRole
+            // 
+            this.editDefRole.AutoSize = true;
+            this.editDefRole.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editDefRole.Depth = 0;
+            this.editDefRole.Icon = null;
+            this.editDefRole.Location = new System.Drawing.Point(411, 402);
+            this.editDefRole.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.editDefRole.MouseState = MaterialSkin.MouseState.HOVER;
+            this.editDefRole.Name = "editDefRole";
+            this.editDefRole.Primary = false;
+            this.editDefRole.Size = new System.Drawing.Size(114, 36);
+            this.editDefRole.TabIndex = 16;
+            this.editDefRole.Text = "Edit def role";
+            this.editDefRole.UseVisualStyleBackColor = true;
             // 
             // ManageCompanyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.editDefRole);
+            this.Controls.Add(this.editNameButton);
             this.Controls.Add(this.changeRoleButton);
             this.Controls.Add(this.roleList);
             this.Controls.Add(this.memberList);
@@ -287,6 +318,9 @@ namespace SpedcordClient
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private MaterialSkin.Controls.MaterialFlatButton editDefRole;
+        private MaterialSkin.Controls.MaterialFlatButton editNameButton;
 
         private MaterialSkin.Controls.MaterialFlatButton changeRoleButton;
 

@@ -101,12 +101,27 @@ namespace SpedcordClient.api
 
         public ApiResponse KickMember(long user, string key, long company, long otherUser)
         {
-            return MakeApiRequest("/company/kickmember", "", new Dictionary<string, string>(),
+            return MakeApiRequest("/company/member/kick", "", new Dictionary<string, string>(),
                 new Dictionary<string, string>
                 {
                     {"companyDiscordId", company + ""},
                     {"kickerDiscordId", user + ""},
                     {"userDiscordId", otherUser + ""},
+                    {"key", key}
+                }, "POST");
+        }
+
+        public ApiResponse EditCompany(long user, string key, int company, string name, string defRole)
+        {
+            var body = new JsonObject();
+            if (name != null) body.Add("name", name);
+            if (defRole != null) body.Add("defaultRole", defRole);
+
+            return MakeApiRequest("/company/edit", body.ToString(), new Dictionary<string, string>(),
+                new Dictionary<string, string>
+                {
+                    {"companyId", company + ""},
+                    {"userDiscordId", user + ""},
                     {"key", key}
                 }, "POST");
         }
