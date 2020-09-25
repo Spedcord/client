@@ -39,6 +39,36 @@ namespace SpedcordClient.api
             return response.StatusCode == HttpStatusCode.OK;
         }
 
+        public ApiResponse PurchaseItem(long user, string key, long discordServerId, int item, object[] args)
+        {
+            var serializeObject = JsonConvert.SerializeObject(args);
+            var response = MakeApiRequest("/company/shop/buy", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>()
+                {
+                    {"discordServerId", discordServerId + ""},
+                    {"userDiscordId", user + ""},
+                    {"key",key},
+                    {"item", item + ""},
+                    {"args", serializeObject}
+                }, "POST");
+            return response;
+        }
+
+        public ShopItem[] GetShopItems(long companyDiscordId)
+        {
+            var response = MakeApiRequest("/company/shop/list", "", new Dictionary<string, string>(),
+                new Dictionary<string, string>()
+                {
+                    {"discordServerId", companyDiscordId + ""}
+                }, "GET");
+
+            var o = JsonConvert.DeserializeObject(response.Response, typeof(ShopItem[]));
+
+            if (o == null) return null;
+
+            return (ShopItem[]) o;
+        }
+
         public User GetUser(long discordId)
         {
             var response = MakeApiRequest("/user/info/" + discordId, "", new Dictionary<string, string>(),

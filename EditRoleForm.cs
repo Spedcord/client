@@ -58,12 +58,14 @@ namespace SpedcordClient
                     permEditCompany.Enabled = false;
                     permManageMembers.Enabled = false;
                     permManageRoles.Enabled = false;
+                    permBuyItems.Enabled = false;
                 }
                 else
                 {
                     permEditCompany.Enabled = true;
                     permManageMembers.Enabled = true;
                     permManageRoles.Enabled = true;
+                    permBuyItems.Enabled = true;
                 }
             };
 
@@ -85,6 +87,11 @@ namespace SpedcordClient
             if (Role.PermissionMethods.HasPermission(role.Permissions, Role.Permission.ManageRoles))
             {
                 permManageRoles.CheckState = CheckState.Checked;
+            }
+
+            if (Role.PermissionMethods.HasPermission(role.Permissions, Role.Permission.BuyItems))
+            {
+                permBuyItems.CheckState = CheckState.Checked;
             }
         }
 
@@ -121,6 +128,8 @@ namespace SpedcordClient
                     list.Add(Role.Permission.ManageMembers);
                 if (permManageRoles.CheckState == CheckState.Checked)
                     list.Add(Role.Permission.ManageRoles);
+                if (permBuyItems.CheckState == CheckState.Checked)
+                    list.Add(Role.Permission.BuyItems);
             }
 
             var permsInt = Role.PermissionMethods.Calculate(list.ToArray());

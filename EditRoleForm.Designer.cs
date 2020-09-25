@@ -40,6 +40,7 @@ namespace SpedcordClient
             this.permManageRoles = new MaterialSkin.Controls.MaterialCheckBox();
             this.permManageMembers = new MaterialSkin.Controls.MaterialCheckBox();
             this.updateButton = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.permBuyItems = new MaterialSkin.Controls.MaterialCheckBox();
             this.SuspendLayout();
             // 
             // roleLabel
@@ -173,11 +174,27 @@ namespace SpedcordClient
             this.updateButton.UseVisualStyleBackColor = true;
             this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
+            // permBuyItems
+            // 
+            this.permBuyItems.Depth = 0;
+            this.permBuyItems.Font = new System.Drawing.Font("Roboto", 10F);
+            this.permBuyItems.Location = new System.Drawing.Point(136, 188);
+            this.permBuyItems.Margin = new System.Windows.Forms.Padding(0);
+            this.permBuyItems.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.permBuyItems.MouseState = MaterialSkin.MouseState.HOVER;
+            this.permBuyItems.Name = "permBuyItems";
+            this.permBuyItems.Ripple = true;
+            this.permBuyItems.Size = new System.Drawing.Size(127, 24);
+            this.permBuyItems.TabIndex = 9;
+            this.permBuyItems.Text = "Buy Items";
+            this.permBuyItems.UseVisualStyleBackColor = true;
+            // 
             // EditRoleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(455, 261);
+            this.Controls.Add(this.permBuyItems);
             this.Controls.Add(this.updateButton);
             this.Controls.Add(this.permManageMembers);
             this.Controls.Add(this.permManageRoles);
@@ -194,6 +211,8 @@ namespace SpedcordClient
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private MaterialSkin.Controls.MaterialCheckBox permBuyItems;
 
         private MaterialSkin.Controls.MaterialRaisedButton updateButton;
 

@@ -13,7 +13,7 @@ namespace SpedcordClient
     {
         private readonly ApiClient _apiClient;
         private readonly MainForm _mainForm;
-        private Company _company;
+        public Company _company;
         private User _user;
 
         public ManageCompanyForm(User user, Company company, ApiClient apiClient, MainForm mainForm)
@@ -44,6 +44,7 @@ namespace SpedcordClient
             changeRoleButton.Click += changeRoleButton_Click;
             editNameButton.Click += editNameButton_Click;
             editDefRole.Click += editDefRoleButton_Click;
+            shopButton.Click += shopButton_Click;
 
             UpdateCompanyInfo();
             UpdateMembers();
@@ -92,11 +93,11 @@ namespace SpedcordClient
             companyNameLabel.Text = _company.Name;
             leftRowLabel.Text = "Balance:\nRanking:\nMembers:\nRoles:\nDefault role:";
             rightRowLabel.Text = "$" + $"{_company.Balance:#,0.##}" + "\n#" + _company.Rank + "\n" +
-                                 _company.MemberDiscordIds.Length + " members\n" + _company.Roles.Length + " roles\n" +
-                                 _company.DefaultRole;
+                                 _company.MemberDiscordIds.Length + " / " + _company.MemberLimit 
+                                 + "\n" + _company.Roles.Length + " roles\n" + _company.DefaultRole;
         }
 
-        private void UpdateAll()
+        public void UpdateAll()
         {
             _mainForm.Reload();
             _company = _mainForm.Company;
@@ -223,6 +224,12 @@ namespace SpedcordClient
                 MessageBoxButtons.OK,
                 apiResponse.StatusCode != HttpStatusCode.OK ? MessageBoxIcon.Error : MessageBoxIcon.Information);
             if (apiResponse.StatusCode == HttpStatusCode.OK) UpdateAll();
+        }
+
+        private void shopButton_Click(object sender, EventArgs e)
+        {
+            var shopForm = new ShopForm(_apiClient, _company, this);
+            shopForm.Show();
         }
     }
 }

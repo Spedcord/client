@@ -24,6 +24,10 @@ namespace SpedcordClient.api
 
         [JsonProperty("rank")] public int Rank { get; set; }
 
+        [JsonProperty("memberLimit")] public int MemberLimit { get; set; }
+
+        [JsonProperty("purchasedItems")] public int[] PurchasedItems { get; set; }
+
         //[JsonProperty("logbook")] public Logbook Logbook { get; set; }
 
         public Role GetRole(long member)
@@ -63,7 +67,8 @@ namespace SpedcordClient.api
             Administrator = 0x0001,
             EditCompany = 0x0002,
             ManageMembers = 0x0004,
-            ManageRoles = 0x0008
+            ManageRoles = 0x0008,
+            BuyItems = 0x0010
         }
 
         public static class PermissionMethods

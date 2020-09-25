@@ -49,6 +49,7 @@ namespace SpedcordClient
             this.changeRoleButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.editNameButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.editDefRole = new MaterialSkin.Controls.MaterialFlatButton();
+            this.shopButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // companyOverviewTitleLabel
@@ -135,7 +136,7 @@ namespace SpedcordClient
             this.leftRowLabel.Location = new System.Drawing.Point(293, 169);
             this.leftRowLabel.MouseState = MaterialSkin.MouseState.HOVER;
             this.leftRowLabel.Name = "leftRowLabel";
-            this.leftRowLabel.Size = new System.Drawing.Size(115, 224);
+            this.leftRowLabel.Size = new System.Drawing.Size(115, 180);
             this.leftRowLabel.TabIndex = 6;
             this.leftRowLabel.Text = "LRow";
             // 
@@ -148,7 +149,7 @@ namespace SpedcordClient
             this.rightRowLabel.Location = new System.Drawing.Point(408, 169);
             this.rightRowLabel.MouseState = MaterialSkin.MouseState.HOVER;
             this.rightRowLabel.Name = "rightRowLabel";
-            this.rightRowLabel.Size = new System.Drawing.Size(117, 224);
+            this.rightRowLabel.Size = new System.Drawing.Size(117, 180);
             this.rightRowLabel.TabIndex = 7;
             this.rightRowLabel.Text = "RRow";
             this.rightRowLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -278,21 +279,38 @@ namespace SpedcordClient
             this.editDefRole.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.editDefRole.Depth = 0;
             this.editDefRole.Icon = null;
-            this.editDefRole.Location = new System.Drawing.Point(411, 402);
+            this.editDefRole.Location = new System.Drawing.Point(329, 355);
             this.editDefRole.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.editDefRole.MouseState = MaterialSkin.MouseState.HOVER;
             this.editDefRole.Name = "editDefRole";
             this.editDefRole.Primary = false;
-            this.editDefRole.Size = new System.Drawing.Size(114, 36);
+            this.editDefRole.Size = new System.Drawing.Size(148, 36);
             this.editDefRole.TabIndex = 16;
-            this.editDefRole.Text = "Edit def role";
+            this.editDefRole.Text = "Edit default role";
             this.editDefRole.UseVisualStyleBackColor = true;
+            // 
+            // shopButton
+            // 
+            this.shopButton.AutoSize = true;
+            this.shopButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.shopButton.Depth = 0;
+            this.shopButton.Icon = null;
+            this.shopButton.Location = new System.Drawing.Point(428, 402);
+            this.shopButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.shopButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.shopButton.Name = "shopButton";
+            this.shopButton.Primary = false;
+            this.shopButton.Size = new System.Drawing.Size(96, 36);
+            this.shopButton.TabIndex = 17;
+            this.shopButton.Text = "Open shop";
+            this.shopButton.UseVisualStyleBackColor = true;
             // 
             // ManageCompanyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.shopButton);
             this.Controls.Add(this.editDefRole);
             this.Controls.Add(this.editNameButton);
             this.Controls.Add(this.changeRoleButton);
@@ -318,6 +336,8 @@ namespace SpedcordClient
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private MaterialSkin.Controls.MaterialFlatButton shopButton;
 
         private MaterialSkin.Controls.MaterialFlatButton editDefRole;
         private MaterialSkin.Controls.MaterialFlatButton editNameButton;

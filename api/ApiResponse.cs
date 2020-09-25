@@ -17,7 +17,7 @@ namespace SpedcordClient.api
         }
 
         public HttpStatusCode StatusCode { get; }
-        public string Response { get; }
+        public string Response { get; set; }
         public bool HasResponse { get; }
         public Dictionary<string, string> ResponseHeaders { get; }
 
