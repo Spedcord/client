@@ -32,7 +32,8 @@ namespace SpedcordClient.api
 
         public Role GetRole(long member)
         {
-            return Roles.FirstOrDefault(role => role.MemberDiscordIds.Contains(member));
+            var rolee = Roles == null ? null : Roles.FirstOrDefault(role => role.MemberDiscordIds.Contains(member));
+            return rolee == null ? new Role(){Name = "", Payout = 0, Permissions = 0, MemberDiscordIds = new long[0]} : rolee;
         }
 
         public bool HasPermission(long member, Role.Permission permission)

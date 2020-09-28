@@ -35,7 +35,7 @@ namespace SpedcordClient
 
             if (!File.Exists(settingsPath))
             {
-                File.Create(settingsPath);
+                File.Create(settingsPath).Close();
             }
 
             var lines = File.ReadLines(settingsPath);

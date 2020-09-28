@@ -46,7 +46,7 @@ namespace SpedcordClient
             // 
             // pictureBox1
             // 
-            this.pictureBox1.ImageLocation = "https://spedcord.xyz/img/spedcord.png";
+            this.pictureBox1.ImageLocation = "https://spedcord.xyz/img/logo_new.png";
             this.pictureBox1.Location = new System.Drawing.Point(12, 72);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(173, 180);
@@ -171,7 +171,9 @@ namespace SpedcordClient
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "LoginForm";
+            this.Sizable = false;
             this.Text = "Spedcord";
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

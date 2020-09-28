@@ -35,7 +35,7 @@ namespace SpedcordClient
         public MainForm(ApiClient apiClient)
         {
             _apiClient = apiClient;
-            _discordController = new DiscordController(699032105715236934);
+            //_discordController = new DiscordController(699032105715236934);
 
             var scsSdkTelemetry = new SCSSdkTelemetry();
             scsSdkTelemetry.Data += Telemetry_Data;
@@ -45,7 +45,7 @@ namespace SpedcordClient
 
             InitializeComponent();
 
-            Disposed += (sender, args) => _discordController.Dispose();
+            //Disposed += (sender, args) => _discordController.Dispose();
 
             // Create a material theme manager and add the form to manage (this)
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -64,7 +64,7 @@ namespace SpedcordClient
             UpdateUser();
             UpdateJobs();
 
-            _discordController.UpdateActivity(false, 0, null);
+            //_discordController.UpdateActivity(false, 0, null);
         }
 
         private void Telemetry_JobCancelled(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace SpedcordClient
             _lastPos = new long[] {0, 0};
 
             _apiClient.CancelJob(Program.DISCORD_ID, Program.KEY);
-            _discordController.UpdateActivity(false, 0, null);
+            //_discordController.UpdateActivity(false, 0, null);
 
             if (InvokeRequired)
             {
@@ -102,13 +102,8 @@ namespace SpedcordClient
             _dist = -1;
             _lastPos = new long[] {0, 0};
 
-            if (!_send)
-            {
-                _send = true;
-                return;
-            }
-
-            _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, _income);
+            var apiResponse = _apiClient.EndJob(Program.DISCORD_ID, Program.KEY, _income);
+            Debug.WriteLine("Job end response: " + apiResponse.StatusCode + " " + apiResponse.Response);
 
             _income = -1;
 
@@ -116,13 +111,13 @@ namespace SpedcordClient
             {
                 Invoke(new Action(UpdateJobs));
                 Invoke(new Action(UpdateUser));
-                Invoke(new Action(() => _discordController.UpdateActivity(false, 0, null)));
+                //Invoke(new Action(() => _discordController.UpdateActivity(false, 0, null)));
             }
             else
             {
                 UpdateJobs();
                 UpdateUser();
-                _discordController.UpdateActivity(false, 0, null);
+                //_discordController.UpdateActivity(false, 0, null);
             }
         }
 
@@ -151,8 +146,8 @@ namespace SpedcordClient
                         // New job started
                         _dist = data.NavigationValues.NavigationDistance;
 
-                        _discordController.UpdateActivity(true, DateTimeOffset.Now.ToUnixTimeMilliseconds(),
-                            _data.JobValues.CitySource + " -> " + _data.JobValues.CityDestination);
+                        //_discordController.UpdateActivity(true, DateTimeOffset.Now.ToUnixTimeMilliseconds(),
+                        //    _data.JobValues.CitySource + " -> " + _data.JobValues.CityDestination);
 
                         var response = _apiClient.StartJob(Program.DISCORD_ID, Program.KEY, new Job
                         {
