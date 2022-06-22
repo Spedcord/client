@@ -149,7 +149,7 @@
     <PackageReference Include="MaterialSkin.Updated" Version="0.2.2" />
     <PackageReference Include="Microsoft.Toolkit.Forms.UI.Controls.WebView" Version="6.1.0-preview1" />
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.18362.2005" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="106.11.5-alpha.0.2" />
     <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.6.0" />
     <PackageReference Include="System.Runtime.WindowsRuntime.UI.Xaml" Version="4.6.0" />
