@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SpedcordClient.Views.LoginView">
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter
+				Property="Foreground"
+				Value="White">
+			</Setter>
+		</Style>
+		<Style Selector="StackPanel#LoginControlPanel">
+			<Style.Animations>
+				<Animation Duration="0:0:2">
+					<KeyFrame Cue="0%">
+						<Setter Property="Opacity" Value="0.0"/>
+					</KeyFrame>
+					<KeyFrame Cue="50%">
+						<Setter Property="Opacity" Value="0.0"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="Opacity" Value="1.0"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+	</UserControl.Styles>
+
+	<DockPanel>
+		<Image
+			Source="/Assets/sc_logo.png"
+			MaxWidth="400"
+			DockPanel.Dock="Top"
+			HorizontalAlignment="Center"/>
+		<StackPanel
+			HorizontalAlignment="Center"
+			VerticalAlignment="Center"
+			DockPanel.Dock="Bottom"
+			Name="LoginControlPanel">
+			<TextBlock
+				HorizontalAlignment="Center"
+				Text="Welcome To Spedcord!"
+				FontSize="24"/>
+			<TextBlock
+				HorizontalAlignment="Center"
+				Text="Please log in."
+				FontSize="20"
+				Margin="4"/>
+			<TextBlock
+				HorizontalAlignment="Center"
+				Text=""
+				MinHeight="10"/>
+			<webview:WebView
+				x:Name="webview"
+				Address="{Binding CurrentAddress}" 
+				MinWidth="300"
+				MinHeight="300"/>
+			<Button
+				Content="Login"
+				HorizontalAlignment="Center"
+				Margin="5"
+				Command="{Binding LoginClick}"/>
+		</StackPanel>
+	</DockPanel>
+</UserControl>
