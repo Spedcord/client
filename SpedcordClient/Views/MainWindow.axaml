@@ -9,5 +9,6 @@
         Icon="/Assets/sc_logo.ico"
         Title="Spedcord Client"
 		Content="{Binding Content}">
-
+	<Window.Styles>
+	</Window.Styles>
 </Window>

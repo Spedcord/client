@@ -11,15 +11,17 @@ namespace SpedcordClient.ViewModels
 
         private string address;
         private string currentAddress;
+        private bool styleClass;
 
         public LoginViewModel()
         {
             CurrentAddress = "https://map.spedcord.xyz";
+            StyleClass = false;
         }
 
         public void LoginClick()
         {
-
+            StyleClass = true;
         }
 
         public string Address
@@ -32,6 +34,12 @@ namespace SpedcordClient.ViewModels
         {
             get => currentAddress;
             set => this.RaiseAndSetIfChanged(ref currentAddress, value);
+        }
+
+        public bool StyleClass
+        {
+            get => styleClass;
+            set => this.RaiseAndSetIfChanged(ref styleClass, value);
         }
 
     }

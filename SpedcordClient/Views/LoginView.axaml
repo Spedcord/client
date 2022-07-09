@@ -14,15 +14,24 @@
 		</Style>
 		<Style Selector="StackPanel#LoginControlPanel">
 			<Style.Animations>
-				<Animation Duration="0:0:2">
+				<Animation Duration="0:0:2" Delay="0:0:1" FillMode="Backward">
 					<KeyFrame Cue="0%">
-						<Setter Property="Opacity" Value="0.0"/>
-					</KeyFrame>
-					<KeyFrame Cue="50%">
 						<Setter Property="Opacity" Value="0.0"/>
 					</KeyFrame>
 					<KeyFrame Cue="100%">
 						<Setter Property="Opacity" Value="1.0"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+		<Style Selector="StackPanel#LoginControlPanel.out">
+			<Style.Animations>
+				<Animation Duration="0:0:2" FillMode="Forward">
+					<KeyFrame Cue="0%">
+						<Setter Property="Opacity" Value="1.0"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="Opacity" Value="0.0"/>
 					</KeyFrame>
 				</Animation>
 			</Style.Animations>
@@ -39,7 +48,8 @@
 			HorizontalAlignment="Center"
 			VerticalAlignment="Center"
 			DockPanel.Dock="Bottom"
-			Name="LoginControlPanel">
+			Name="LoginControlPanel"
+			Classes.out="{Binding StyleClass}">
 			<TextBlock
 				HorizontalAlignment="Center"
 				Text="Welcome To Spedcord!"
