@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using SpedcordClient.ViewModels;
 using System;
+using System.Diagnostics;
 
 namespace SpedcordClient
 {
@@ -11,6 +12,8 @@ namespace SpedcordClient
         {
             var name = data.GetType().FullName!.Replace("ViewModel", "View");
             var type = Type.GetType(name);
+
+            Debug.WriteLine(">>>>> "+name);
 
             if (type != null)
             {

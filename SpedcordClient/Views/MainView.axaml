@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+	         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:maincontent="clr-namespace:SpedcordClient.MainContent"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SpedcordClient.Views.MainView">
+	<UserControl.Styles>
+		<Style Selector="StackPanel#Sidebar">
+			<Setter Property="Background" Value="Red"/>
+		</Style>
+		<Style Selector="StackPanel#Sidebar">
+			<Style.Animations>
+				<Animation Duration="0:0:0.5" FillMode="Forward">
+					<KeyFrame Cue="0%">
+						<Setter Property="MinWidth" Value="0"/>
+						<Setter Property="MaxWidth" Value="0"/>
+					</KeyFrame>
+					<KeyFrame Cue="50%">
+						<Setter Property="MinWidth" Value="0"/>
+						<Setter Property="MaxWidth" Value="0"/>
+					</KeyFrame>
+					<KeyFrame Cue="100%">
+						<Setter Property="MinWidth" Value="50"/>
+						<Setter Property="MaxWidth" Value="50"/>
+					</KeyFrame>
+				</Animation>
+			</Style.Animations>
+		</Style>
+	</UserControl.Styles>
+
+	<DockPanel>
+		<StackPanel Name="Sidebar"
+			        DockPanel.Dock="Left"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Stretch"
+					MinWidth="0"
+					MaxWidth="0">
+			<Button Name="ButtonHome" Classes="Flat" ToolTip.Tip="Home" Command="{Binding BtnHomeClick}">
+				<avalonia:MaterialIcon Kind="Home" Foreground="White" Height="25" Width="25"/>
+			</Button>
+			<Button Name="ButtonCompany" Classes="Flat" ToolTip.Tip="Company" Command="{Binding BtnCompanyClick}">
+				<avalonia:MaterialIcon Kind="AccountGroup" Foreground="White" Height="25" Width="25"/>
+			</Button>
+			<Button Name="ButtonJobs" Classes="Flat" ToolTip.Tip="Jobs" Command="{Binding BtnJobsClick}">
+				<avalonia:MaterialIcon Kind="MapSearchOutline" Foreground="White" Height="25" Width="25"/>
+			</Button>
+			<Button Name="ButtonSettings" Classes="Flat" ToolTip.Tip="Settings"  Command="{Binding BtnSettingsClick}">
+				<avalonia:MaterialIcon Kind="Settings" Foreground="White" Height="25" Width="25"/>
+			</Button>
+		</StackPanel>
+		<Carousel Name="MainContent"
+				  HorizontalAlignment="Stretch"
+				  SelectedIndex="{Binding SelectedContent}">
+			<Carousel.Styles>
+				<Style Selector="Carousel#MainContent:not(.notransitions)">
+					<Setter Property="PageTransition">
+						<PageSlide Duration="0.35" 
+								   SlideOutEasing="CircularEaseOut"
+								   SlideInEasing="CircularEaseOut" />
+					</Setter>
+				</Style>
+			</Carousel.Styles>
+			<maincontent:Home/>
+			<maincontent:Company/>
+			<maincontent:Jobs/>
+			<maincontent:Settings/>
+		</Carousel>
+	</DockPanel>
+</UserControl>

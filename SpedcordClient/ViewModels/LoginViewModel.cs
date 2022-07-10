@@ -1,6 +1,10 @@
+using Avalonia.Controls;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Reactive;
 using System.Text;
 using WebViewControl;
 
@@ -11,17 +15,26 @@ namespace SpedcordClient.ViewModels
 
         private string address;
         private string currentAddress;
-        private bool styleClass;
 
         public LoginViewModel()
         {
             CurrentAddress = "https://map.spedcord.xyz";
-            StyleClass = false;
+            ButtonLoginClick = ReactiveCommand.Create(() => { });
         }
 
-        public void LoginClick()
+        public ObservableCollection<string> Languages
         {
-            StyleClass = true;
+            get { return Localizer.Localizer.Instance.GetLanguages(); }
+        }
+        public string Language
+        {
+            get { return Localizer.Localizer.Instance.Language; }
+            set
+            {
+                Program.Settings.SelectedLanguage = value;
+                Settings.SettingsLoader.SaveSettings(Program.Settings);
+                Localizer.Localizer.Instance.LoadLanguage(value);
+            }
         }
 
         public string Address
@@ -36,11 +49,6 @@ namespace SpedcordClient.ViewModels
             set => this.RaiseAndSetIfChanged(ref currentAddress, value);
         }
 
-        public bool StyleClass
-        {
-            get => styleClass;
-            set => this.RaiseAndSetIfChanged(ref styleClass, value);
-        }
-
+        public ReactiveCommand<Unit, Unit> ButtonLoginClick { get; }
     }
 }

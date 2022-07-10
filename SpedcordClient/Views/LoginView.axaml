@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
+			 xmlns:i18n="clr-namespace:SpedcordClient.Localizer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SpedcordClient.Views.LoginView">
 	<UserControl.Styles>
@@ -24,39 +25,31 @@
 				</Animation>
 			</Style.Animations>
 		</Style>
-		<Style Selector="StackPanel#LoginControlPanel.out">
-			<Style.Animations>
-				<Animation Duration="0:0:2" FillMode="Forward">
-					<KeyFrame Cue="0%">
-						<Setter Property="Opacity" Value="1.0"/>
-					</KeyFrame>
-					<KeyFrame Cue="100%">
-						<Setter Property="Opacity" Value="0.0"/>
-					</KeyFrame>
-				</Animation>
-			</Style.Animations>
-		</Style>
 	</UserControl.Styles>
 
 	<DockPanel>
-		<Image
-			Source="/Assets/sc_logo.png"
-			MaxWidth="400"
-			DockPanel.Dock="Top"
-			HorizontalAlignment="Center"/>
+		<Image Source="/Assets/sc_logo.png"
+			   MaxWidth="400"
+			   DockPanel.Dock="Top"
+			   HorizontalAlignment="Center"/>
+		<StackPanel HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					DockPanel.Dock="Bottom">
+			<ComboBox Classes="Outline"
+					  Items="{Binding Languages}"
+					  SelectedItem="{Binding Language}"/>
+		</StackPanel>
 		<StackPanel
-			HorizontalAlignment="Center"
 			VerticalAlignment="Center"
 			DockPanel.Dock="Bottom"
-			Name="LoginControlPanel"
-			Classes.out="{Binding StyleClass}">
+			Name="LoginControlPanel">
 			<TextBlock
 				HorizontalAlignment="Center"
-				Text="Welcome To Spedcord!"
+				Text="{i18n:Localize Login.Title.1}"
 				FontSize="24"/>
 			<TextBlock
 				HorizontalAlignment="Center"
-				Text="Please log in."
+				Text="{i18n:Localize Login.Title.2}"
 				FontSize="20"
 				Margin="4"/>
 			<TextBlock
@@ -65,14 +58,15 @@
 				MinHeight="10"/>
 			<webview:WebView
 				x:Name="webview"
-				Address="{Binding CurrentAddress}" 
+				Address="{Binding CurrentAddress}"
 				MinWidth="300"
 				MinHeight="300"/>
 			<Button
-				Content="Login"
+				Content="{i18n:Localize Login.Button.Login}"
 				HorizontalAlignment="Center"
 				Margin="5"
-				Command="{Binding LoginClick}"/>
+				Classes="Outline"
+				Command="{Binding ButtonLoginClick}"/>
 		</StackPanel>
 	</DockPanel>
 </UserControl>
