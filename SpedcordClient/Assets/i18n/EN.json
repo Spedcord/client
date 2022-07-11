@@ -1,5 +1,20 @@
 ﻿{
   "Login.Title.1": "Welcome to Spedcord!",
   "Login.Title.2": "Please log in.",
-  "Login.Button.Login": "Login"
+  "Login.Button.Login": "Login",
+
+  "Main.Sidebar.Button.Home.Tooltip": "Home",
+  "Main.Sidebar.Button.Company.Tooltip": "Company",
+  "Main.Sidebar.Button.Jobs.Tooltip": "Jobs",
+  "Main.Sidebar.Button.Settings.Tooltip": "Settings",
+
+  "Main.Page.Home.Title": "Home",
+  "Main.Page.Company.Title": "Company",
+  "Main.Page.Jobs.Title": "Jobs",
+
+  "Main.Page.Settings.Title": "Settings",
+  "Main.Page.Settings.Label.Language": "Language:",
+  "Main.Page.Settings.Label.Token": "Token:",
+  "Main.Page.Settings.Checkbox.ShowToken": "Show token",
+  "Main.Page.Settings.Button.Logout": "Log out"
 }

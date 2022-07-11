@@ -2,10 +2,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:i18n="clr-namespace:SpedcordClient.Localizer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SpedcordClient.MainContent.Company">
-	<StackPanel VerticalAlignment="Center"
-				HorizontalAlignment="Center">
-		<TextBlock Text="Company" FontSize="64"/>
-	</StackPanel>
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Stretch">
+			<TextBlock HorizontalAlignment="Stretch" Height="30"/> <!-- Makeshift padding -->
+			<TextBlock Text="{i18n:Localize Main.Page.Company.Title}" FontSize="64" TextAlignment="Center"/>
+		</StackPanel>
+		<ScrollViewer VerticalAlignment="Stretch"
+			  HorizontalAlignment="Stretch"
+			  DockPanel.Dock="Bottom">
+			<StackPanel VerticalAlignment="Center"
+				        HorizontalAlignment="Center"
+					    DockPanel.Dock="Bottom">
+				<!-- Place UI here -->
+			</StackPanel>
+		</ScrollViewer>
+	</DockPanel>
 </UserControl>

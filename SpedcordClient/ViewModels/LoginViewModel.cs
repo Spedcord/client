@@ -18,7 +18,7 @@ namespace SpedcordClient.ViewModels
 
         public LoginViewModel()
         {
-            CurrentAddress = "https://map.spedcord.xyz";
+            CurrentAddress = "https://spedcord.xyz";
             ButtonLoginClick = ReactiveCommand.Create(() => { });
         }
 

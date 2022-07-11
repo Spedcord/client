@@ -1,5 +1,20 @@
 ﻿{
   "Login.Title.1": "Willkommen zu Spedcord!",
   "Login.Title.2": "Bitte melde dich an.",
-  "Login.Button.Login": "Anmelden"
+  "Login.Button.Login": "Anmelden",
+
+  "Main.Sidebar.Button.Home.Tooltip": "Home",
+  "Main.Sidebar.Button.Company.Tooltip": "Firma",
+  "Main.Sidebar.Button.Jobs.Tooltip": "Aufträge",
+  "Main.Sidebar.Button.Settings.Tooltip": "Einstellungen",
+
+  "Main.Page.Home.Title": "Home",
+  "Main.Page.Company.Title": "Firma",
+  "Main.Page.Jobs.Title": "Aufträge",
+
+  "Main.Page.Settings.Title": "Einstellungen",
+  "Main.Page.Settings.Label.Language": "Sprache:",
+  "Main.Page.Settings.Label.Token": "Schlüssel:",
+  "Main.Page.Settings.Checkbox.ShowToken": "Schlüssel zeigen",
+  "Main.Page.Settings.Button.Logout": "Abmelden"
 }

@@ -2,10 +2,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+			 xmlns:i18n="clr-namespace:SpedcordClient.Localizer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SpedcordClient.MainContent.Settings">
-	<StackPanel VerticalAlignment="Center"
-				HorizontalAlignment="Center">
-		<TextBlock Text="Settings" FontSize="64"/>
-	</StackPanel>
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Stretch">
+			<TextBlock HorizontalAlignment="Stretch" Height="30"/> <!-- Makeshift padding -->
+			<TextBlock Text="{i18n:Localize Main.Page.Settings.Title}" FontSize="64" TextAlignment="Center"/>
+		</StackPanel>
+		<ScrollViewer VerticalAlignment="Stretch"
+				      HorizontalAlignment="Stretch"
+					  DockPanel.Dock="Bottom">
+			<StackPanel VerticalAlignment="Center"
+				        HorizontalAlignment="Center"
+					    DockPanel.Dock="Bottom">
+				<TextBlock Text="{i18n:Localize Main.Page.Settings.Label.Language}" FontSize="16"/>
+				<ComboBox Classes="Outline"
+						  Items="{Binding Languages}"
+						  SelectedItem="{Binding Language}"/>
+
+				<TextBlock Text="" Margin="12.5"/>
+				<TextBlock Text="{i18n:Localize Main.Page.Settings.Label.Token}" FontSize="16"/>
+				<TextBox Watermark="Token"
+						 Text="blablabla blsefg fgfdgh f"
+						 IsReadOnly="True"
+						 PasswordChar="{Binding TokenHideChar}"
+						 MinWidth="300"/>
+				<CheckBox Name="ShowToken" 
+						  Content="{i18n:Localize Main.Page.Settings.Checkbox.ShowToken}" 
+						  VerticalContentAlignment="Center">
+					<i:Interaction.Behaviors>
+						<ia:EventTriggerBehavior EventName="Checked" SourceObject="ShowToken">
+							<ia:CallMethodAction TargetObject="{Binding}" MethodName="ShowToken" />
+						</ia:EventTriggerBehavior>
+						<ia:EventTriggerBehavior EventName="Unchecked" SourceObject="ShowToken">
+							<ia:CallMethodAction TargetObject="{Binding}" MethodName="HideToken" />
+						</ia:EventTriggerBehavior>
+					</i:Interaction.Behaviors>
+				</CheckBox>
+
+				<Button Classes="Dark" Margin="25" Command="{Binding BtnLogoutClick}">
+					<StackPanel Orientation="Horizontal">
+						<avalonia:MaterialIcon Kind="Warning" Foreground="Orange" Width="25" Height="20" VerticalAlignment="Center"/>
+						<TextBlock Text="{i18n:Localize Main.Page.Settings.Button.Logout}" VerticalAlignment="Center"/>
+					</StackPanel>
+				</Button>
+			</StackPanel>
+		</ScrollViewer>
+	</DockPanel>
 </UserControl>

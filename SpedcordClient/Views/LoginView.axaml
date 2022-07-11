@@ -5,14 +5,9 @@
 			 xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
 			 xmlns:i18n="clr-namespace:SpedcordClient.Localizer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SpedcordClient.Views.LoginView">
+             x:Class="SpedcordClient.Views.LoginView"
+			 Background="#232323">
 	<UserControl.Styles>
-		<Style Selector="Button">
-			<Setter
-				Property="Foreground"
-				Value="White">
-			</Setter>
-		</Style>
 		<Style Selector="StackPanel#LoginControlPanel">
 			<Style.Animations>
 				<Animation Duration="0:0:2" Delay="0:0:1" FillMode="Backward">

@@ -8,6 +8,8 @@ namespace SpedcordClient
     internal class Program
     {
         private static Settings.Settings _settings = null;
+        public static readonly string Version = "v1.0.0-dev";
+
         public static Settings.Settings Settings
         {
             set
