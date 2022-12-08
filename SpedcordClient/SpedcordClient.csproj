@@ -34,7 +34,7 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.16" />
     <PackageReference Include="Material.Avalonia" Version="3.0.0-rc0.95-nightly" />
     <PackageReference Include="Material.Icons.Avalonia" Version="1.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="WebViewControl-Avalonia" Version="2.91.27" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
